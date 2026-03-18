@@ -16,6 +16,36 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--bg);co
 .card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--R);padding:20px;margin-bottom:20px}
 .ct{font-size:16px;font-weight:700;margin-bottom:4px}
 .cs{font-size:13px;color:var(--tx3);margin-bottom:16px}
+
+/* 히어로 날씨 */
+.hero{text-align:center;padding:32px 20px;position:relative;overflow:hidden}
+.hero-icon{font-size:64px;margin-bottom:8px;line-height:1}
+.hero-label{font-size:28px;font-weight:700;margin-bottom:4px}
+.hero-sub{font-size:15px;margin-bottom:16px;line-height:1.5}
+.hero-gauge{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:12px}
+.hero-gauge .bar{width:40px;height:8px;border-radius:4px;background:var(--bd);transition:background .5s}
+.hero-scores{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.hero-scores .hs-item{font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+.hero-scores .hs-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.sbar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx3);margin:10px 0 4px;justify-content:center;flex-wrap:wrap}
+.sd2{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sd2.live{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.5)}
+.sd2.stale{background:var(--amber)}.sd2.off{background:var(--red)}.sd2.loading{background:var(--tx3);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.rb{padding:4px 12px;border:1px solid var(--bd2);border-radius:16px;background:transparent;color:var(--tx2);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s}
+.rb:hover{border-color:var(--blue);color:var(--blue)}
+
+/* 접기 토글 */
+.toggle-wrap{border-top:1px solid var(--bd);margin-top:16px;padding-top:12px}
+.toggle-btn{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 0;width:100%;background:none;border:none;font-family:inherit;color:var(--tx)}
+.toggle-btn span{font-size:14px;font-weight:500}
+.toggle-btn .arrow{font-size:12px;color:var(--tx3);transition:transform .3s}
+.toggle-btn .arrow.open{transform:rotate(180deg)}
+.toggle-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.toggle-body.open{max-height:8000px}
+
+/* 신호 */
 .sg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media(max-width:640px){.sg{grid-template-columns:1fr}}
 .sc{background:var(--bg3);border-radius:var(--r);padding:14px;border-left:3px solid var(--bd2)}
@@ -30,13 +60,38 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--bg);co
 .sh{display:flex;align-items:center;gap:8px;margin:18px 0 10px}
 .stag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase}
 .sbox{background:var(--bg3);border-radius:var(--r);padding:14px 16px;margin-top:16px;font-size:13px;line-height:1.8;color:var(--tx2);border-left:3px solid var(--green)}
+
+/* 수동 입력 */
+.manual-bar{margin-top:12px;padding:12px;background:var(--bg3);border-radius:var(--r);display:none}
+.manual-bar.show{display:block}
+.manual-bar p{font-size:12px;color:var(--tx2);margin-bottom:8px}
+.manual-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.manual-grid label{font-size:11px;color:var(--tx3);display:block;margin-bottom:2px}
+.manual-grid input[type=number]{width:100%;padding:6px 8px;border:1px solid var(--bd2);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg2);color:var(--tx);outline:none}
+.manual-grid input[type=number]:focus{border-color:var(--blue)}
+.manual-apply{margin-top:8px;padding:6px 16px;border:1px solid var(--blue);border-radius:16px;background:var(--blue);color:#fff;font-size:12px;cursor:pointer;font-family:inherit}
+
+/* 슬라이더/폼 */
 .sr{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 @media(max-width:600px){.sr{grid-template-columns:1fr}}
 .sg2 label{display:flex;justify-content:space-between;font-size:13px;color:var(--tx2);margin-bottom:4px}
 .sg2 label span{font-weight:500;color:var(--tx)}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--bd2);border-radius:2px;outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer;border:2px solid var(--bg2);box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.st{display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:2px}
+.st2{display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:2px}
+
+/* 개편안 토글 */
+.reform-toggle{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg3);border-radius:var(--r);margin-bottom:16px;flex-wrap:wrap}
+.reform-toggle label{font-size:13px;color:var(--tx2);cursor:pointer;display:flex;align-items:center;gap:6px}
+.reform-toggle .rtag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--amber-bg);color:var(--amber-tx)}
+.switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;inset:0;background:var(--bd2);border-radius:12px;cursor:pointer;transition:background .3s}
+.switch .slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--bg2);border-radius:50%;transition:transform .3s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked+.slider{background:var(--blue)}
+.switch input:checked+.slider:before{transform:translateX(20px)}
+
+/* 테이블 */
 .at{border-collapse:collapse;width:100%;font-size:13px}
 .at th{text-align:left;font-weight:400;font-size:11px;color:var(--tx3);padding:8px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.3px}
 .at th:not(:first-child){text-align:right}
@@ -47,175 +102,116 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .pb button{padding:8px 16px;border:1px solid var(--bd2);border-radius:20px;background:var(--bg2);color:var(--tx);font-size:13px;cursor:pointer;transition:all .2s;font-family:inherit}
 .pb button:hover{background:var(--bg3);border-color:var(--blue);color:var(--blue)}
 .pb button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
-.met{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-@media(max-width:600px){.met{grid-template-columns:repeat(2,1fr)}}
+
+/* 메트릭 */
+.met{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:700px){.met{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.met{grid-template-columns:repeat(2,1fr)}}
 .me{background:var(--bg3);border-radius:var(--r);padding:14px}
 .me .ml{font-size:11px;color:var(--tx3);margin-bottom:4px}
 .me .mv{font-size:18px;font-weight:700}
+.me.highlight{border:1.5px solid var(--teal);background:var(--teal-bg)}
+.me.highlight .mv{color:var(--teal-tx)}
+
 .cw{position:relative;width:100%;height:300px;margin-bottom:16px}
 .lg{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;font-size:12px;color:var(--tx2);margin-bottom:24px}
 .lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
 .fn{background:var(--bg3);border-radius:var(--r);padding:14px 16px;font-size:12px;color:var(--tx3);line-height:1.7}
-.sbar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx3);margin:10px 0 4px}
-.sd2{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sd2.live{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.5)}
-.sd2.stale{background:var(--amber)}.sd2.off{background:var(--red)}.sd2.loading{background:var(--tx3);animation:pulse 1.2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.rb{padding:4px 12px;border:1px solid var(--bd2);border-radius:16px;background:transparent;color:var(--tx2);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s}
-.rb:hover{border-color:var(--blue);color:var(--blue)}
 .hdr{text-align:center;margin-bottom:28px;padding:20px 0}
 .hdr h1{font-size:26px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hdr p{font-size:14px;color:var(--tx2)}
-.guide{margin-top:16px;border-top:1px solid var(--bd);padding-top:14px}
-.guide-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 0}
-.guide-toggle span{font-size:14px;font-weight:500;color:var(--tx)}
-.guide-toggle .arrow{font-size:12px;color:var(--tx3);transition:transform .2s}
-.guide-toggle .arrow.open{transform:rotate(180deg)}
-.guide-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
-.guide-body.open{max-height:3000px}
-.guide-section{margin-top:14px}
-.guide-section h4{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.guide-section h4 .dot-color{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.guide-item{display:grid;grid-template-columns:100px 1fr;gap:8px;font-size:12px;line-height:1.6;padding:6px 0;border-bottom:1px solid var(--bd)}
-.guide-item:last-child{border-bottom:none}
-.guide-item .gi-label{font-weight:500;color:var(--tx)}
-.guide-item .gi-desc{color:var(--tx2)}
+
+/* 가이드 */
 .guide-cat{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
 @media(max-width:600px){.guide-cat{grid-template-columns:1fr}}
 .guide-cat-item{background:var(--bg3);border-radius:var(--r);padding:12px}
 .guide-cat-item .gc-title{font-size:12px;font-weight:600;margin-bottom:4px}
 .guide-cat-item .gc-desc{font-size:11px;color:var(--tx2);line-height:1.5}
-.guide-cat-item .gc-indicators{font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5}
-.score-legend{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
-.score-legend-item{display:flex;align-items:center;gap:5px;font-size:12px}
-.score-legend-item .dots{display:flex;gap:2px}
-.score-legend-item .dot-sm{width:6px;height:6px;border-radius:50%}
+.guide-cat-item .gc-ind{font-size:11px;color:var(--tx3);margin-top:6px;line-height:1.5}
+.guide-item{display:grid;grid-template-columns:100px 1fr;gap:8px;font-size:12px;line-height:1.6;padding:6px 0;border-bottom:1px solid var(--bd)}
+.guide-item:last-child{border-bottom:none}
+.score-legend{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.score-legend-item{display:flex;align-items:center;gap:4px;font-size:12px}
+.score-legend-item .d2{display:flex;gap:2px}
+.score-legend-item .d3{width:6px;height:6px;border-radius:50%}
 </style>
 </head>
 <body>
 <div class="hdr">
   <h1>ISA 계좌 투자 시뮬레이션</h1>
-  <p>연간 납입한도 2,000만원 · 총 납입한도 1억원 · 의무가입 3년</p>
+  <p id="hdr-sub">연간 납입한도 2,000만원 · 총 납입한도 1억원 · 의무가입 3년</p>
 </div>
 
-<!-- 매수신호 -->
+<!-- ===== 히어로: 시장 날씨 ===== -->
+<div class="card hero" id="hero-card">
+  <div class="hero-icon" id="hero-icon">⏳</div>
+  <div class="hero-label" id="hero-label" style="color:var(--tx)">시장 분석 중...</div>
+  <div class="hero-sub" id="hero-sub" style="color:var(--tx2)">데이터를 불러오고 있습니다</div>
+  <div class="hero-gauge" id="hero-gauge"></div>
+  <div class="hero-scores" id="hero-scores"></div>
+  <div class="sbar">
+    <span class="sd2 loading" id="sd"></span>
+    <span id="stx">데이터 불러오는 중...</span>
+    <button class="rb" onclick="fetchAll()">↻ 새로고침</button>
+    <button class="rb" onclick="toggleManual()">직접 입력</button>
+  </div>
+
+  <!-- 수동 입력 -->
+  <div class="manual-bar" id="manual-bar">
+    <p>데이터 수신이 안 될 때, 네이버 금융 등에서 확인한 값을 직접 입력하세요.</p>
+    <div class="manual-grid">
+      <div><label>VIX 지수</label><input type="number" id="mv-vix" step="0.1" placeholder="18.0"></div>
+      <div><label>나스닥 RSI</label><input type="number" id="mv-nqr" step="1" placeholder="55"></div>
+      <div><label>SCHD 배당률(%)</label><input type="number" id="mv-djd" step="0.1" placeholder="3.5"></div>
+      <div><label>원/달러 환율</label><input type="number" id="mv-usd" step="1" placeholder="1380"></div>
+    </div>
+    <button class="manual-apply" onclick="applyManual()">적용하기</button>
+  </div>
+</div>
+
+<!-- ===== 상세 매수신호 (접힘) ===== -->
 <div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-    <div><div class="ct">오늘의 매수신호</div><div class="cs" style="margin-bottom:0">매월 투자일에 확인 — 실시간 데이터 자동 수신</div></div>
-    <span class="badge" id="ob">로딩중...</span>
+  <div class="toggle-btn" onclick="toggleSection('detail')">
+    <span>상세 매수신호 (자세히 보기)</span>
+    <span class="arrow" id="arrow-detail">▼</span>
   </div>
-  <div class="sbar"><span class="sd2 loading" id="sd"></span><span id="stx">데이터 불러오는 중...</span><button class="rb" onclick="fetchAll()">↻ 새로고침</button></div>
-
-  <!-- S&P500 -->
-  <div class="sh"><span class="stag" style="background:var(--blue-bg);color:var(--blue-tx)">시장 전체</span><span style="font-size:13px;font-weight:500">S&P500 기반</span><span class="badge" id="spb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
-  <div class="sg" id="sp"></div>
-
-  <!-- 나스닥 -->
-  <div class="sh"><span class="stag" style="background:var(--purple-bg);color:var(--purple-tx)">나스닥100</span><span style="font-size:13px;font-weight:500">성장주 타이밍</span><span class="badge" id="nqb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
-  <div class="sg" id="nq"></div>
-
-  <!-- 미국배당 다우존스 -->
-  <div class="sh"><span class="stag" style="background:var(--green-bg);color:var(--green-tx)">미국배당</span><span style="font-size:13px;font-weight:500">다우존스 배당주 (SCHD 기반)</span><span class="badge" id="djb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
-  <div class="sg" id="dj"></div>
-
-  <!-- 코스피 -->
-  <div class="sh"><span class="stag" style="background:var(--coral-bg);color:var(--coral-tx)">코스피</span><span style="font-size:13px;font-weight:500">KODEX 200</span><span class="badge" id="ksb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
-  <div class="sg" id="ks"></div>
-
-  <!-- 종합 전략 -->
-  <div class="sbox" id="sb">분석 중...</div>
-
-  <!-- 매수신호 가이드 -->
-  <div class="guide">
-    <div class="guide-toggle" onclick="toggleGuide()">
-      <span>매수신호 가이드</span>
-      <span class="arrow" id="guide-arrow">▼</span>
-    </div>
-    <div class="guide-body" id="guide-body">
-
-      <div class="guide-section">
-        <h4>신호 점수 읽는 법</h4>
-        <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:8px">각 지표는 1~5점으로 평가됩니다. 점수가 높을수록 매수에 유리한 환경입니다.</p>
-        <div class="score-legend">
-          <span class="score-legend-item"><span class="dots"><span class="dot-sm" style="background:var(--red)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span></span><span style="color:var(--red-tx)">1점 매수 자제</span></span>
-          <span class="score-legend-item"><span class="dots"><span class="dot-sm" style="background:var(--blue)"></span><span class="dot-sm" style="background:var(--blue)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span></span><span style="color:var(--blue-tx)">2점 보통</span></span>
-          <span class="score-legend-item"><span class="dots"><span class="dot-sm" style="background:var(--teal)"></span><span class="dot-sm" style="background:var(--teal)"></span><span class="dot-sm" style="background:var(--teal)"></span><span class="dot-sm" style="background:var(--bd2)"></span><span class="dot-sm" style="background:var(--bd2)"></span></span><span style="color:var(--teal-tx)">3점 매수 우호</span></span>
-          <span class="score-legend-item"><span class="dots"><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--bd2)"></span></span><span style="color:var(--green-tx)">4점 매수 확대</span></span>
-          <span class="score-legend-item"><span class="dots"><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span><span class="dot-sm" style="background:var(--green)"></span></span><span style="color:var(--green-tx)">5점 적극 매수</span></span>
-        </div>
-      </div>
-
-      <div class="guide-section">
-        <h4>자산군별 지표 설명</h4>
-        <div class="guide-cat">
-          <div class="guide-cat-item" style="border-left:3px solid var(--blue)">
-            <div class="gc-title" style="color:var(--blue-tx)">시장 전체 (S&P500)</div>
-            <div class="gc-desc">시장 전반의 분위기를 판단합니다. 모든 자산군에 공통 영향을 줍니다.</div>
-            <div class="gc-indicators">
-              <strong>VIX 공포지수</strong> — 시장의 변동성 기대치. 30 이상이면 투자자들이 공포 상태로, 역설적으로 매수 기회.<br>
-              <strong>200일선 이격도</strong> — 현재가 ÷ 200일 이동평균. 마이너스이면 장기 평균보다 싸다는 뜻.<br>
-              <strong>시가배당률</strong> — 연간배당 ÷ 주가. 높을수록 주가가 저평가 상태.
-            </div>
-          </div>
-          <div class="guide-cat-item" style="border-left:3px solid var(--purple)">
-            <div class="gc-title" style="color:var(--purple-tx)">나스닥100 (성장주)</div>
-            <div class="gc-desc">기술·성장주는 변동성이 크므로 전용 지표로 타이밍을 잡습니다.</div>
-            <div class="gc-indicators">
-              <strong>RSI (14일)</strong> — 최근 14일간 상승/하락 비율. 30 이하면 과매도(바닥 근처), 70 이상이면 과매수(고점 근처).<br>
-              <strong>200일선 이격도</strong> — 나스닥은 변동성이 커서 S&P보다 넓은 범위(±15%)를 정상으로 봅니다.<br>
-              <strong>S&P 대비 상대강도</strong> — 20일간 나스닥이 S&P보다 얼마나 부진한지. 크게 부진하면 반등 기회.
-            </div>
-          </div>
-          <div class="guide-cat-item" style="border-left:3px solid var(--green)">
-            <div class="gc-title" style="color:var(--green-tx)">미국배당 다우존스 (SCHD)</div>
-            <div class="gc-desc">배당주는 안정적이나 고평가 시 배당 매력이 떨어집니다. SCHD 실제 데이터를 사용합니다.</div>
-            <div class="gc-indicators">
-              <strong>RSI (14일)</strong> — 배당주는 변동성이 작아 RSI 35 이하면 과매도로 판단합니다.<br>
-              <strong>200일선 이격도</strong> — 다우는 S&P보다 변동성 작아 ±8%를 정상 범위로 봅니다.<br>
-              <strong>SCHD 실제 배당률</strong> — 최근 12개월 실제 분배금 합계 ÷ 현재가. 추정치가 아닌 실측치입니다.
-            </div>
-          </div>
-          <div class="guide-cat-item" style="border-left:3px solid var(--coral)">
-            <div class="gc-title" style="color:var(--coral-tx)">코스피 (KODEX 200)</div>
-            <div class="gc-desc">국내 시장은 환율의 영향을 크게 받으므로 원/달러 환율을 핵심 지표로 사용합니다.</div>
-            <div class="gc-indicators">
-              <strong>RSI (14일)</strong> — 코스피 과매도/과매수 판단. 35 이하면 매수 확대.<br>
-              <strong>200일선 이격도</strong> — 코스피 장기 평균 대비 현재 위치.<br>
-              <strong>원/달러 환율</strong> — 1,450원 이상이면 외국인 매도 과잉, 코스피 저점 동반 확률 높음. 역발상 매수 신호.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="guide-section">
-        <h4>종합 신호와 투자 전략</h4>
-        <div style="font-size:12px;color:var(--tx2);line-height:1.7">
-          <p>종합 신호는 4개 자산군의 점수를 <strong>포트폴리오 비중에 비례</strong>하여 가중 평균합니다. 예를 들어 나스닥 비중이 35%이면 나스닥 신호가 종합 점수에 더 많이 반영됩니다.</p>
-          <div style="margin:10px 0">
-            <div class="guide-item"><span class="gi-label" style="color:var(--green)">적극 매수 (4~5)</span><span class="gi-desc">월 투자금의 120~150%까지 비중 확대. 여유자금 추가 납입 검토.</span></div>
-            <div class="guide-item"><span class="gi-label" style="color:var(--teal)">매수 우호 (3~4)</span><span class="gi-desc">계획한 금액의 100~120% 투자. 점수 높은 자산군 비중 약간 확대.</span></div>
-            <div class="guide-item"><span class="gi-label" style="color:var(--blue)">보통 (2~3)</span><span class="gi-desc">정액 적립식 투자 유지. 비중 변경 불필요.</span></div>
-            <div class="guide-item"><span class="gi-label" style="color:var(--amber)">관망 (1.3~2)</span><span class="gi-desc">월 투자금의 70~80%만 투자. 나머지 이월. 채권형 비중 확대.</span></div>
-            <div class="guide-item"><span class="gi-label" style="color:var(--red)">매수 자제 (1~1.3)</span><span class="gi-desc">50%만 투자. 단기채권 비중 최대한 높이고 현금 보유.</span></div>
-          </div>
-          <p style="color:var(--tx3);font-size:11px;margin-top:8px">※ 위 전략은 참고용이며, 개인의 투자 성향과 재정 상황에 맞게 조절하세요. 적립식 투자의 핵심은 꾸준함입니다.</p>
-        </div>
-      </div>
-
-    </div>
+  <div class="toggle-body" id="body-detail">
+    <div class="sh" style="margin-top:14px"><span class="stag" style="background:var(--blue-bg);color:var(--blue-tx)">시장 전체</span><span style="font-size:13px;font-weight:500">S&P500 기반</span><span class="badge" id="spb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
+    <div class="sg" id="sp"></div>
+    <div class="sh"><span class="stag" style="background:var(--purple-bg);color:var(--purple-tx)">나스닥100</span><span style="font-size:13px;font-weight:500">성장주 타이밍</span><span class="badge" id="nqb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
+    <div class="sg" id="nq"></div>
+    <div class="sh"><span class="stag" style="background:var(--green-bg);color:var(--green-tx)">미국배당</span><span style="font-size:13px;font-weight:500">다우존스 배당주 (SCHD 기반)</span><span class="badge" id="djb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
+    <div class="sg" id="dj"></div>
+    <div class="sh"><span class="stag" style="background:var(--coral-bg);color:var(--coral-tx)">코스피</span><span style="font-size:13px;font-weight:500">KODEX 200</span><span class="badge" id="ksb" style="font-size:11px;padding:2px 10px;margin-left:auto">—</span></div>
+    <div class="sg" id="ks"></div>
+    <div class="sbox" id="sb">분석 중...</div>
   </div>
 </div>
 
-<!-- 투자설정 -->
+<!-- ===== 투자설정 ===== -->
 <div class="card">
   <div class="ct">월 투자 설정</div><div class="cs">슬라이더로 투자금액과 기간을 조절하세요</div>
+
+  <!-- 2026 개편안 토글 -->
+  <div class="reform-toggle">
+    <span class="rtag">NEW</span>
+    <label class="switch"><input type="checkbox" id="reform-chk" onchange="applyReform()"><span class="slider"></span></label>
+    <label for="reform-chk" style="flex:1;min-width:180px">2026년 ISA 개편안 적용해 보기<br><span style="font-size:11px;color:var(--tx3)">연 4,000만원 / 총 2억원 / 비과세 500만원(서민형 1,000만원)</span></label>
+  </div>
+
+  <!-- ISA 유형 선택 -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="rb" id="isa-general" onclick="setIsaType('general')" style="border-color:var(--blue);color:var(--blue)">일반형</button>
+    <button class="rb" id="isa-youth" onclick="setIsaType('youth')">서민·청년형</button>
+  </div>
+
   <div class="sr">
-    <div class="sg2"><label>월 투자금액 <span id="ao">50만원</span></label><input type="range" min="10" max="166" step="1" value="50" id="mo"><div class="st"><span>10만원</span><span>166만원 (연 2,000만원)</span></div></div>
-    <div class="sg2"><label>투자 기간 <span id="yo">3년</span></label><input type="range" min="3" max="15" step="1" value="3" id="yr"><div class="st"><span>3년 (최소)</span><span>15년</span></div></div>
+    <div class="sg2"><label>월 투자금액 <span id="ao">50만원</span></label><input type="range" min="10" max="166" step="1" value="50" id="mo"><div class="st2"><span>10만원</span><span id="mo-max-label">166만원 (연 2,000만원)</span></div></div>
+    <div class="sg2"><label>투자 기간 <span id="yo">3년</span></label><input type="range" min="3" max="15" step="1" value="3" id="yr"><div class="st2"><span>3년 (최소)</span><span>15년</span></div></div>
   </div>
 </div>
 
-<!-- 포트폴리오 -->
+<!-- ===== 포트폴리오 ===== -->
 <div class="card">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div class="ct">포트폴리오 종목 비중</div><span style="font-size:13px;font-weight:500" id="tp">합계: 100%</span></div>
   <div class="cs">비중을 조절하면 월 투자금이 자동 배분됩니다</div>
@@ -228,14 +224,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </div>
 
-<!-- 결과 -->
+<!-- ===== 시뮬레이션 결과 ===== -->
 <div class="card">
-  <div class="ct">시뮬레이션 결과</div><div class="cs">복리 수익과 분배금 추정</div>
+  <div class="ct">시뮬레이션 결과</div><div class="cs">복리 수익과 분배금 추정 · ISA 절세 효과 포함</div>
   <div class="met" id="mt"></div>
   <div class="cw"><canvas id="gc"></canvas></div>
   <div class="lg" id="gl"></div>
   <div style="font-size:14px;font-weight:500;margin-bottom:10px">연도별 예상 분배금</div>
   <div class="cw" style="height:220px"><canvas id="dc"></canvas></div>
+</div>
+
+<!-- ===== 매수신호 가이드 링크 ===== -->
+<div style="text-align:center;margin-bottom:20px">
+  <a href="guide.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--R);color:var(--tx);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--bd2)';this.style.color='var(--tx)'">
+    <span style="font-size:18px">📖</span>
+    매수신호 가이드 — 처음이라면 꼭 읽어보세요
+    <span style="font-size:12px;color:var(--tx3)">→</span>
+  </a>
 </div>
 
 <div class="fn">
@@ -245,7 +250,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 </div>
 
 <script>
-/* ========== 종목 데이터 ========== */
+/* ================ 설정 ================ */
 var FUNDS=[
   {n:'TIGER S&P500',c:'미국 대형주',r:.10,d:.015,co:'#2563eb',p:30},
   {n:'TIGER 미국나스닥100',c:'미국 성장주',r:.12,d:.005,co:'#7c3aed',p:20},
@@ -258,601 +263,333 @@ var dk=matchMedia('(prefers-color-scheme:dark)').matches;
 var gridColor=dk?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
 var tickColor=dk?'rgba(255,255,255,.45)':'rgba(0,0,0,.4)';
 
-/* ========== 가이드 토글 ========== */
-function toggleGuide(){
-  var b=document.getElementById('guide-body');
-  var a=document.getElementById('guide-arrow');
-  b.classList.toggle('open');
-  a.classList.toggle('open');
+/* ISA 설정 */
+var isaType='general';
+var reformMode=false;
+function getIsaConfig(){
+  if(reformMode){
+    return{
+      annualLimit:4000, totalLimit:20000,
+      taxFree:isaType==='general'?500:1000,
+      monthlyMax:333
+    };
+  }
+  return{
+    annualLimit:2000, totalLimit:10000,
+    taxFree:isaType==='general'?200:400,
+    monthlyMax:166
+  };
 }
 
-/* ========== 시장 데이터 ========== */
-var MD={vix:null,spM:null,spD:null,nqR:null,nqM:null,nqS:null,djR:null,djM:null,djD:null,ksR:null,ksM:null,ksU:null};
+function setIsaType(type){
+  isaType=type;
+  document.getElementById('isa-general').style.borderColor=type==='general'?'var(--blue)':'var(--bd2)';
+  document.getElementById('isa-general').style.color=type==='general'?'var(--blue)':'var(--tx2)';
+  document.getElementById('isa-youth').style.borderColor=type==='youth'?'var(--blue)':'var(--bd2)';
+  document.getElementById('isa-youth').style.color=type==='youth'?'var(--blue)':'var(--tx2)';
+  recalc();
+}
 
+function applyReform(){
+  reformMode=document.getElementById('reform-chk').checked;
+  var cfg=getIsaConfig();
+  var moEl=document.getElementById('mo');
+  moEl.max=cfg.monthlyMax;
+  if(parseInt(moEl.value)>cfg.monthlyMax) moEl.value=cfg.monthlyMax;
+  document.getElementById('mo-max-label').textContent=cfg.monthlyMax+'만원 (연 '+cfg.annualLimit.toLocaleString()+'만원)';
+  document.getElementById('hdr-sub').textContent='연간 납입한도 '+cfg.annualLimit.toLocaleString()+'만원 · 총 납입한도 '+(cfg.totalLimit>=10000?(cfg.totalLimit/10000)+'억':cfg.totalLimit.toLocaleString()+'만')+'원 · 의무가입 3년';
+  document.getElementById('ao').textContent=moEl.value+'만원';
+  buildTable();recalc();
+}
+
+/* ================ 토글 ================ */
+function toggleSection(id){
+  var b=document.getElementById('body-'+id);
+  var a=document.getElementById('arrow-'+id);
+  b.classList.toggle('open');a.classList.toggle('open');
+}
+function toggleManual(){
+  document.getElementById('manual-bar').classList.toggle('show');
+}
+function applyManual(){
+  var v;
+  v=parseFloat(document.getElementById('mv-vix').value);if(!isNaN(v))MD.vix=v;
+  v=parseInt(document.getElementById('mv-nqr').value);if(!isNaN(v))MD.nqR=v;
+  v=parseFloat(document.getElementById('mv-djd').value);if(!isNaN(v))MD.djD=v;
+  v=parseInt(document.getElementById('mv-usd').value);if(!isNaN(v))MD.ksU=v;
+  setSt('stale','수동 입력 · '+new Date().toLocaleString('ko-KR'));
+  renderSignals();
+  document.getElementById('manual-bar').classList.remove('show');
+}
+
+/* ================ 시장 데이터 ================ */
+var MD={vix:null,spM:null,spD:null,nqR:null,nqM:null,nqS:null,djR:null,djM:null,djD:null,ksR:null,ksM:null,ksU:null};
 var PROXIES=[
   function(u){return'https://corsproxy.io/?'+encodeURIComponent(u)},
   function(u){return'https://api.allorigins.win/raw?url='+encodeURIComponent(u)}
 ];
 
 function yfetch(sym,range,interval,events){
-  range=range||'1y'; interval=interval||'1d'; events=events||'';
+  range=range||'1y';interval=interval||'1d';events=events||'';
   var url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(sym)+'?range='+range+'&interval='+interval;
-  if(events) url+='&events='+events;
+  if(events)url+='&events='+events;
   return tryProxies(url);
 }
-
 async function tryProxies(url){
   for(var i=0;i<PROXIES.length;i++){
-    try{
-      var r=await fetch(PROXIES[i](url),{signal:AbortSignal.timeout(10000)});
-      if(!r.ok) continue;
-      var d=await r.json();
-      if(d.chart && d.chart.result) return d.chart.result[0];
-    }catch(e){continue}
-  }
-  return null;
+    try{var r=await fetch(PROXIES[i](url),{signal:AbortSignal.timeout(10000)});if(!r.ok)continue;var d=await r.json();if(d.chart&&d.chart.result)return d.chart.result[0]}catch(e){continue}
+  }return null;
 }
 
-/* ========== 기술적 지표 계산 ========== */
-function calcRSI(closes,n){
-  n=n||14;
-  if(closes.length<n+1) return null;
-  var r=closes.slice(-(n+1));
-  var gain=0, loss=0;
-  for(var i=1;i<r.length;i++){
-    var change=r[i]-r[i-1];
-    if(change>0) gain+=change; else loss-=change;
-  }
-  var avgGain=gain/n, avgLoss=loss/n;
-  if(avgLoss===0) return 100;
-  return Math.round(100-100/(1+avgGain/avgLoss));
-}
+function calcRSI(closes,n){n=n||14;if(closes.length<n+1)return null;var r=closes.slice(-(n+1));var g=0,l=0;for(var i=1;i<r.length;i++){var c=r[i]-r[i-1];if(c>0)g+=c;else l-=c}var ag=g/n,al=l/n;return al===0?100:Math.round(100-100/(1+ag/al))}
+function calcMA200(closes){if(closes.length<200)return null;var s=0;for(var i=closes.length-200;i<closes.length;i++)s+=closes[i];var m=s/200;return Math.round(((closes[closes.length-1]-m)/m)*1000)/10}
+function calcRelStr(a,b,n){n=n||20;if(a.length<n+1||b.length<n+1)return null;return Math.round(((a[a.length-1]/a[a.length-1-n]-1)-(b[b.length-1]/b[b.length-1-n]-1))*1000)/10}
+function cl(arr){return arr?arr.filter(function(v){return v!=null}):[]}
 
-function calcMA200Dev(closes){
-  if(closes.length<200) return null;
-  var sum=0;
-  for(var i=closes.length-200;i<closes.length;i++) sum+=closes[i];
-  var ma=sum/200;
-  var current=closes[closes.length-1];
-  return Math.round(((current-ma)/ma)*1000)/10;
-}
-
-function calcRelStr(closesA,closesB,n){
-  n=n||20;
-  if(closesA.length<n+1||closesB.length<n+1) return null;
-  var retA=(closesA[closesA.length-1]/closesA[closesA.length-1-n]-1)*100;
-  var retB=(closesB[closesB.length-1]/closesB[closesB.length-1-n]-1)*100;
-  return Math.round((retA-retB)*10)/10;
-}
-
-function cleanArr(arr){return arr?arr.filter(function(v){return v!=null}):[]}
-
-/* ========== SCHD 실제 배당률 계산 ========== */
 function calcSCHDYield(data){
-  if(!data) return null;
-  var price=null;
-  if(data.meta && data.meta.regularMarketPrice){
-    price=data.meta.regularMarketPrice;
-  }else{
-    var closes=cleanArr(data.indicators.quote[0].close);
-    if(closes.length>0) price=closes[closes.length-1];
-  }
-  if(!price) return null;
-
-  var divTotal=0;
-  var events=data.events;
-  if(events && events.dividends){
-    var divs=events.dividends;
-    var now=Date.now()/1000;
-    var oneYearAgo=now-365*24*3600;
+  if(!data)return null;
+  var price=data.meta&&data.meta.regularMarketPrice?data.meta.regularMarketPrice:null;
+  if(!price){var cs=cl(data.indicators.quote[0].close);if(cs.length>0)price=cs[cs.length-1]}
+  if(!price)return null;
+  var total=0,events=data.events;
+  if(events&&events.dividends){
+    var divs=events.dividends,now=Date.now()/1000,cutoff=now-365*24*3600;
     var keys=Object.keys(divs);
-    for(var i=0;i<keys.length;i++){
-      var ts=parseInt(keys[i]);
-      if(ts>=oneYearAgo){
-        divTotal+=divs[keys[i]].amount;
-      }
-    }
+    for(var i=0;i<keys.length;i++){if(parseInt(keys[i])>=cutoff)total+=divs[keys[i]].amount}
   }
-
-  if(divTotal===0) return null;
-  return Math.round((divTotal/price)*1000)/10;
+  return total===0?null:Math.round((total/price)*1000)/10;
 }
 
-/* ========== 데이터 가져오기 ========== */
+var fetchTimeout=null;
 async function fetchAll(){
   setSt('loading','데이터 불러오는 중...');
+  /* 15초 타임아웃 */
+  if(fetchTimeout)clearTimeout(fetchTimeout);
+  fetchTimeout=setTimeout(function(){
+    if(MD.vix==null){
+      setSt('off','응답 시간 초과 — 기본값 또는 직접 입력을 이용하세요');
+      applyFallback();renderSignals();
+    }
+  },15000);
+
   try{
     var results=await Promise.all([
-      yfetch('^VIX','5d','1d'),
-      yfetch('^GSPC','1y','1d'),
-      yfetch('^IXIC','1y','1d'),
-      yfetch('^DJI','1y','1d'),
-      yfetch('^KS11','1y','1d'),
-      yfetch('KRW=X','5d','1d'),
+      yfetch('^VIX','5d'),yfetch('^GSPC'),yfetch('^IXIC'),
+      yfetch('^DJI'),yfetch('^KS11'),yfetch('KRW=X','5d'),
       yfetch('SCHD','1y','1d','div')
     ]);
+    clearTimeout(fetchTimeout);
+    var vxD=results[0],spD=results[1],nqD=results[2],djD=results[3],ksD=results[4],fxD=results[5],schd=results[6];
 
-    var vxData=results[0], spData=results[1], nqData=results[2];
-    var djData=results[3], ksData=results[4], fxData=results[5], schdData=results[6];
+    if(vxD){var vc=cl(vxD.indicators.quote[0].close);if(vc.length>0)MD.vix=Math.round(vc[vc.length-1]*10)/10}
+    if(spD){var sc=cl(spD.indicators.quote[0].close);MD.spM=calcMA200(sc);if(spD.meta&&spD.meta.regularMarketPrice)MD.spD=Math.round(72/spD.meta.regularMarketPrice*1000)/10}
+    if(nqD&&spD){var nc=cl(nqD.indicators.quote[0].close),spc=cl(spD.indicators.quote[0].close);MD.nqR=calcRSI(nc);MD.nqM=calcMA200(nc);MD.nqS=calcRelStr(nc,spc)}
+    if(djD){var dc=cl(djD.indicators.quote[0].close);MD.djR=calcRSI(dc);MD.djM=calcMA200(dc)}
+    if(schd){var ry=calcSCHDYield(schd);if(ry!==null)MD.djD=ry;else if(djD&&djD.meta&&djD.meta.regularMarketPrice)MD.djD=Math.round(580/djD.meta.regularMarketPrice*1000)/10}
+    else if(djD&&djD.meta&&djD.meta.regularMarketPrice)MD.djD=Math.round(580/djD.meta.regularMarketPrice*1000)/10;
+    if(ksD){var kc=cl(ksD.indicators.quote[0].close);MD.ksR=calcRSI(kc);MD.ksM=calcMA200(kc)}
+    if(fxD){var fc=cl(fxD.indicators.quote[0].close);if(fc.length>0)MD.ksU=Math.round(fc[fc.length-1])}
 
-    /* VIX */
-    if(vxData){
-      var vc=cleanArr(vxData.indicators.quote[0].close);
-      if(vc.length>0) MD.vix=Math.round(vc[vc.length-1]*10)/10;
-    }
-
-    /* S&P500 */
-    if(spData){
-      var sc=cleanArr(spData.indicators.quote[0].close);
-      MD.spM=calcMA200Dev(sc);
-      if(spData.meta && spData.meta.regularMarketPrice){
-        MD.spD=Math.round(72/spData.meta.regularMarketPrice*1000)/10;
-      }
-    }
-
-    /* 나스닥 */
-    if(nqData && spData){
-      var nc=cleanArr(nqData.indicators.quote[0].close);
-      var spc=cleanArr(spData.indicators.quote[0].close);
-      MD.nqR=calcRSI(nc);
-      MD.nqM=calcMA200Dev(nc);
-      MD.nqS=calcRelStr(nc,spc);
-    }
-
-    /* 다우존스 */
-    if(djData){
-      var dc=cleanArr(djData.indicators.quote[0].close);
-      MD.djR=calcRSI(dc);
-      MD.djM=calcMA200Dev(dc);
-    }
-
-    /* SCHD 실제 배당률 */
-    if(schdData){
-      var realYield=calcSCHDYield(schdData);
-      if(realYield!==null){
-        MD.djD=realYield;
-      }else if(djData && djData.meta && djData.meta.regularMarketPrice){
-        MD.djD=Math.round(580/djData.meta.regularMarketPrice*1000)/10;
-      }
-    }else if(djData && djData.meta && djData.meta.regularMarketPrice){
-      MD.djD=Math.round(580/djData.meta.regularMarketPrice*1000)/10;
-    }
-
-    /* 코스피 */
-    if(ksData){
-      var kc=cleanArr(ksData.indicators.quote[0].close);
-      MD.ksR=calcRSI(kc);
-      MD.ksM=calcMA200Dev(kc);
-    }
-
-    /* 환율 */
-    if(fxData){
-      var fc=cleanArr(fxData.indicators.quote[0].close);
-      if(fc.length>0) MD.ksU=Math.round(fc[fc.length-1]);
-    }
-
-    var ok=MD.vix!=null && MD.nqR!=null && MD.djR!=null && MD.ksR!=null && MD.djD!=null;
-    setSt(ok?'live':'stale', ok?'실시간 · '+new Date().toLocaleString('ko-KR'):'일부 데이터만 수신됨');
-
+    var ok=MD.vix!=null&&MD.nqR!=null&&MD.djR!=null&&MD.ksR!=null;
+    setSt(ok?'live':'stale',ok?'실시간 · '+new Date().toLocaleString('ko-KR'):'일부 데이터만 수신됨');
   }catch(e){
+    clearTimeout(fetchTimeout);
     setSt('off','데이터 수신 실패 — 기본값 표시 중');
   }
-  applyFallback();
-  renderSignals();
+  applyFallback();renderSignals();
 }
 
 function applyFallback(){
-  if(MD.vix==null) MD.vix=18;
-  if(MD.spM==null) MD.spM=3;
-  if(MD.spD==null) MD.spD=1.4;
-  if(MD.nqR==null) MD.nqR=55;
-  if(MD.nqM==null) MD.nqM=5;
-  if(MD.nqS==null) MD.nqS=0;
-  if(MD.djR==null) MD.djR=52;
-  if(MD.djM==null) MD.djM=2;
-  if(MD.djD==null) MD.djD=3.5;
-  if(MD.ksR==null) MD.ksR=50;
-  if(MD.ksM==null) MD.ksM=0;
-  if(MD.ksU==null) MD.ksU=1380;
+  if(MD.vix==null)MD.vix=18;if(MD.spM==null)MD.spM=3;if(MD.spD==null)MD.spD=1.4;
+  if(MD.nqR==null)MD.nqR=55;if(MD.nqM==null)MD.nqM=5;if(MD.nqS==null)MD.nqS=0;
+  if(MD.djR==null)MD.djR=52;if(MD.djM==null)MD.djM=2;if(MD.djD==null)MD.djD=3.5;
+  if(MD.ksR==null)MD.ksR=50;if(MD.ksM==null)MD.ksM=0;if(MD.ksU==null)MD.ksU=1380;
 }
+function setSt(l,t){document.getElementById('sd').className='sd2 '+l;document.getElementById('stx').textContent=t}
 
-function setSt(level,text){
-  document.getElementById('sd').className='sd2 '+level;
-  document.getElementById('stx').textContent=text;
-}
+/* ================ 신호 판정 ================ */
+function sigVix(v){if(v>=40)return{s:5,l:'극도 공포 → 적극 매수',d:'시장 패닉. 강한 반등 구간.'};if(v>=30)return{s:4,l:'공포 → 분할 매수',d:'과매도. 비중 확대.'};if(v>=20)return{s:2,l:'불안 → 기본 비중',d:'불확실성. 정액 투자.'};if(v>=15)return{s:2,l:'안정 → 정상',d:'정상. 계획대로.'};return{s:1,l:'과열 낙관 → 신중',d:'VIX 15 미만. 조정 가능.'}}
+function sigSpMa(v){if(v<=-20)return{s:5,l:'대폭 하회 → 적극 매수',d:'200일선 -20%. 역사적 저점.'};if(v<=-10)return{s:4,l:'하회 → 매수 확대',d:'-10~20% 하회.'};if(v<=-3)return{s:3,l:'소폭 하회 → 우호',d:'200일선 근처.'};if(v<=10)return{s:2,l:'정상 → 기본',d:'정상. 정액 투자.'};return{s:1,l:'대폭 상회 → 신중',d:'+10%. 과열 가능.'}}
+function sigSpDy(v){if(v>=3)return{s:5,l:'매우 높음 → 적극 매수',d:'저평가.'};if(v>=2.2)return{s:4,l:'높음 → 매수 확대',d:'평균 상회.'};if(v>=1.5)return{s:3,l:'보통 → 정상',d:'평균 수준.'};if(v>=1.2)return{s:2,l:'낮음 → 기본',d:'주가 다소 높음.'};return{s:1,l:'매우 낮음 → 신중',d:'고평가.'}}
+function sigNqRsi(v){if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'RSI 25이하. 바닥.'};if(v<=30)return{s:4,l:'과매도 → 매수 확대',d:'RSI 30이하. 반등.'};if(v<=45)return{s:3,l:'약세 → 매수 우호',d:'과매도 근접.'};if(v<=70)return{s:2,l:'중립 → 기본',d:'정상. 정액 적립.'};return{s:1,l:'과매수 → 자제',d:'RSI 70+. 조정.'}}
+function sigNqMa(v){if(v<=-25)return{s:5,l:'대폭 하회 → 적극 매수',d:'나스닥 -25%. 극단.'};if(v<=-12)return{s:4,l:'하회 → 매수 확대',d:'성장주 저가.'};if(v<=-5)return{s:3,l:'소폭 하회 → 우호',d:'나스닥 조정.'};if(v<=15)return{s:2,l:'정상 → 기본',d:'+15%까지 정상.'};return{s:1,l:'대폭 상회 → 신중',d:'나스닥 과열.'}}
+function sigRel(v){if(v<=-8)return{s:5,l:'크게 부진 → 적극 매수',d:'S&P대비 8%p+ 부진.'};if(v<=-4)return{s:4,l:'부진 → 매수 확대',d:'언더퍼폼.'};if(v<=2)return{s:3,l:'비슷한 흐름 → 정상',d:'두 지수 유사.'};if(v<=6)return{s:2,l:'우세 → 기본',d:'성장주 강세.'};return{s:1,l:'과열 → 자제',d:'너무 앞서감.'}}
+function sigDjRsi(v){if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'배당주 바닥.'};if(v<=35)return{s:4,l:'과매도 → 매수 확대',d:'배당주 낙폭과대.'};if(v<=50)return{s:3,l:'약세~보통 → 우호',d:'적정~저평가.'};if(v<=70)return{s:2,l:'정상 → 기본',d:'정상. 정액.'};return{s:1,l:'과매수 → 자제',d:'배당주 고평가.'}}
+function sigDjMa(v){if(v<=-15)return{s:5,l:'대폭 하회 → 적극 매수',d:'다우 -15%. 저점.'};if(v<=-8)return{s:4,l:'하회 → 매수 확대',d:'200일선 하회.'};if(v<=-3)return{s:3,l:'소폭 하회 → 우호',d:'200일선 근처.'};if(v<=8)return{s:2,l:'정상 → 기본',d:'다우 ±8% 정상.'};return{s:1,l:'상회 → 신중',d:'배당주 과열.'}}
+function sigDjDy(v){if(v>=4.5)return{s:5,l:'매우 높음 → 적극 매수',d:'SCHD 배당률 4.5%+. 최적기.'};if(v>=3.8)return{s:4,l:'높음 → 매수 확대',d:'평균 상회.'};if(v>=3.2)return{s:3,l:'보통 → 정상',d:'SCHD 평균 수준.'};if(v>=2.5)return{s:2,l:'낮음 → 기본',d:'배당 매력 보통.'};return{s:1,l:'매우 낮음 → 신중',d:'2.5% 미만. 고평가.'}}
+function sigKsRsi(v){if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'코스피 바닥.'};if(v<=35)return{s:4,l:'과매도 → 매수 확대',d:'코스피 낙폭과대.'};if(v<=50)return{s:3,l:'약세~보통 → 우호',d:'적정 가격대.'};if(v<=70)return{s:2,l:'정상 → 기본',d:'코스피 정상.'};return{s:1,l:'과매수 → 자제',d:'코스피 과열.'}}
+function sigKsMa(v){if(v<=-20)return{s:5,l:'대폭 하회 → 적극 매수',d:'코스피 -20%.'};if(v<=-10)return{s:4,l:'하회 → 매수 확대',d:'-10~20% 하회.'};if(v<=-3)return{s:3,l:'소폭 하회 → 우호',d:'200일선 근처.'};if(v<=8)return{s:2,l:'정상 → 기본',d:'정상.'};return{s:1,l:'상회 → 신중',d:'+8%. 과열.'}}
+function sigUsd(v){if(v>=1450)return{s:5,l:'원화 약세 극단 → 적극 매수',d:'환율 1,450+. 저점 동반.'};if(v>=1380)return{s:4,l:'원화 약세 → 매수 확대',d:'외국인 매도 과잉.'};if(v>=1300)return{s:3,l:'보통 → 정상',d:'환율 중립.'};if(v>=1200)return{s:2,l:'원화 강세 → 기본',d:'환율 안정.'};return{s:1,l:'원화 매우 강세 → 신중',d:'차익실현 가능.'}}
 
-/* ========== 매수 신호 판정 ========== */
-/* S&P500 */
-function sigVix(v){
-  if(v>=40)return{s:5,l:'극도 공포 → 적극 매수',d:'시장 패닉. 역사적 강한 반등 구간.'};
-  if(v>=30)return{s:4,l:'공포 → 분할 매수',d:'과매도 구간. 비중 확대 고려.'};
-  if(v>=20)return{s:2,l:'불안 → 기본 비중',d:'불확실성 확대. 정액 투자 유지.'};
-  if(v>=15)return{s:2,l:'안정 → 정상 투자',d:'시장 정상. 계획대로 적립.'};
-  return{s:1,l:'과열 낙관 → 신중',d:'VIX 15 미만. 조정 가능성.'};
-}
-function sigSpMa(v){
-  if(v<=-20)return{s:5,l:'대폭 하회 → 적극 매수',d:'200일선 -20% 이하. 역사적 저점.'};
-  if(v<=-10)return{s:4,l:'하회 → 매수 확대',d:'200일선 -10~20% 하회.'};
-  if(v<=-3)return{s:3,l:'소폭 하회 → 우호적',d:'200일선 근처. 분할 매수 적합.'};
-  if(v<=10)return{s:2,l:'정상 범위 → 기본',d:'정상 이격도. 정액 투자.'};
-  return{s:1,l:'대폭 상회 → 신중',d:'+10% 이상. 과열 가능.'};
-}
-function sigSpDy(v){
-  if(v>=3)return{s:5,l:'매우 높음 → 적극 매수',d:'저평가 신호. 절호의 기회.'};
-  if(v>=2.2)return{s:4,l:'높음 → 매수 확대',d:'역사 평균 상회.'};
-  if(v>=1.5)return{s:3,l:'보통 → 정상',d:'역사 평균 수준.'};
-  if(v>=1.2)return{s:2,l:'낮음 → 기본',d:'주가 다소 높은 수준.'};
-  return{s:1,l:'매우 낮음 → 신중',d:'역사적 고평가.'};
-}
+/* ================ 신호 UI ================ */
+function scoreColor(s){if(s>=4)return{bg:'var(--green-bg)',tx:'var(--green-tx)',bd:'var(--green)'};if(s>=3)return{bg:'var(--teal-bg)',tx:'var(--teal-tx)',bd:'var(--teal)'};if(s>=2)return{bg:'var(--blue-bg)',tx:'var(--blue-tx)',bd:'var(--blue)'};if(s>=1.3)return{bg:'var(--amber-bg)',tx:'var(--amber-tx)',bd:'var(--amber)'};return{bg:'var(--red-bg)',tx:'var(--red-tx)',bd:'var(--red)'}}
+function olbl(a){return a>=4?'적극 매수':a>=3?'매수 우호':a>=2?'보통':a>=1.3?'관망':'매수 자제'}
 
-/* 나스닥 */
-function sigNqRsi(v){
-  if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'RSI 25 이하. 기술적 바닥.'};
-  if(v<=30)return{s:4,l:'과매도 → 매수 확대',d:'RSI 30 이하. 반등 확률 높음.'};
-  if(v<=45)return{s:3,l:'약세 → 매수 우호',d:'과매도 근접 구간.'};
-  if(v<=70)return{s:2,l:'중립 → 기본',d:'정상 범위. 정액 적립.'};
-  return{s:1,l:'과매수 → 자제',d:'RSI 70+. 조정 가능성.'};
+function sigCard(name,val,unit,sig){
+  var c=scoreColor(sig.s),dots='';
+  for(var i=0;i<5;i++)dots+='<span class="dot'+(i<sig.s?' on':'')+'" style="color:'+c.bd+'"></span>';
+  return'<div class="sc" style="border-left-color:'+c.bd+'"><div class="sl">'+name+'</div><div class="sv mono" style="color:'+c.tx+'">'+val+unit+'</div><div class="dots">'+dots+'</div><div class="sd" style="color:'+c.tx+'">'+sig.l+'</div><div class="se">'+sig.d+'</div></div>';
 }
-function sigNqMa(v){
-  if(v<=-25)return{s:5,l:'대폭 하회 → 적극 매수',d:'나스닥 200일선 -25%. 극단 저점.'};
-  if(v<=-12)return{s:4,l:'하회 → 매수 확대',d:'성장주 저가 매수 구간.'};
-  if(v<=-5)return{s:3,l:'소폭 하회 → 우호',d:'나스닥 조정 구간. 분할 매수.'};
-  if(v<=15)return{s:2,l:'정상 범위 → 기본',d:'나스닥은 +15%까지 정상.'};
-  return{s:1,l:'대폭 상회 → 신중',d:'나스닥 과열 가능성.'};
-}
-function sigRelStr(v){
-  if(v<=-8)return{s:5,l:'크게 부진 → 적극 매수',d:'S&P 대비 8%p+ 부진. 반등 기회.'};
-  if(v<=-4)return{s:4,l:'부진 → 매수 확대',d:'언더퍼폼. 비중 확대.'};
-  if(v<=2)return{s:3,l:'비슷한 흐름 → 정상',d:'두 지수 유사하게 움직이는 중.'};
-  if(v<=6)return{s:2,l:'우세 → 기본',d:'성장주 강세. 추가 매수 불필요.'};
-  return{s:1,l:'과열 → 자제',d:'S&P 대비 너무 앞서감.'};
-}
+function setBdg(id,avg){var c=scoreColor(avg),el=document.getElementById(id);el.textContent=olbl(avg)+' '+avg.toFixed(1);el.style.background=c.bg;el.style.color=c.tx}
 
-/* 미국배당 다우존스 (SCHD) */
-function sigDjRsi(v){
-  if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'배당주 바닥. 배당률 극대화 구간.'};
-  if(v<=35)return{s:4,l:'과매도 → 매수 확대',d:'배당주 낙폭과대. 매수 기회.'};
-  if(v<=50)return{s:3,l:'약세~보통 → 우호',d:'배당주 적정~저평가.'};
-  if(v<=70)return{s:2,l:'정상 → 기본',d:'정상 범위. 정액 투자.'};
-  return{s:1,l:'과매수 → 자제',d:'배당주도 고평가. 조정 주의.'};
-}
-function sigDjMa(v){
-  if(v<=-15)return{s:5,l:'대폭 하회 → 적극 매수',d:'다우 200일선 -15%. 배당주 저점.'};
-  if(v<=-8)return{s:4,l:'하회 → 매수 확대',d:'200일선 하회. 추가 매수 고려.'};
-  if(v<=-3)return{s:3,l:'소폭 하회 → 우호',d:'200일선 근처. 분할 매수.'};
-  if(v<=8)return{s:2,l:'정상 범위 → 기본',d:'다우 ±8% 정상.'};
-  return{s:1,l:'상회 → 신중',d:'배당주도 과열 가능.'};
-}
-function sigDjDy(v){
-  if(v>=4.5)return{s:5,l:'매우 높음 → 적극 매수',d:'SCHD 배당률 4.5%+. 배당 투자 최적기.'};
-  if(v>=3.8)return{s:4,l:'높음 → 매수 확대',d:'SCHD 배당률 평균 상회. 비중 확대.'};
-  if(v>=3.2)return{s:3,l:'보통 → 정상',d:'SCHD 배당률 평균 수준 (약 3.2~3.8%).'};
-  if(v>=2.5)return{s:2,l:'낮음 → 기본',d:'배당 매력 보통. 주가 다소 높음.'};
-  return{s:1,l:'매우 낮음 → 신중',d:'배당률 2.5% 미만. 고평가.'};
-}
-
-/* 코스피 */
-function sigKsRsi(v){
-  if(v<=25)return{s:5,l:'극도 과매도 → 적극 매수',d:'코스피 바닥. 역사적 저점.'};
-  if(v<=35)return{s:4,l:'과매도 → 매수 확대',d:'코스피 낙폭과대. 반등 기대.'};
-  if(v<=50)return{s:3,l:'약세~보통 → 우호',d:'코스피 적정 가격대.'};
-  if(v<=70)return{s:2,l:'정상 → 기본',d:'코스피 정상 범위.'};
-  return{s:1,l:'과매수 → 자제',d:'코스피 과열.'};
-}
-function sigKsMa(v){
-  if(v<=-20)return{s:5,l:'대폭 하회 → 적극 매수',d:'코스피 200일선 -20%. 극단 저점.'};
-  if(v<=-10)return{s:4,l:'하회 → 매수 확대',d:'코스피 -10~20% 하회.'};
-  if(v<=-3)return{s:3,l:'소폭 하회 → 우호',d:'200일선 근처. 분할 매수.'};
-  if(v<=8)return{s:2,l:'정상 범위 → 기본',d:'코스피 정상 이격도.'};
-  return{s:1,l:'상회 → 신중',d:'코스피 +8% 이상. 과열.'};
-}
-function sigUsd(v){
-  if(v>=1450)return{s:5,l:'원화 약세 극단 → 적극 매수',d:'환율 1,450+. 코스피 저점 동반 확률 높음.'};
-  if(v>=1380)return{s:4,l:'원화 약세 → 매수 확대',d:'외국인 매도 과잉. 반등 기대.'};
-  if(v>=1300)return{s:3,l:'보통 → 정상',d:'환율 중립 구간.'};
-  if(v>=1200)return{s:2,l:'원화 강세 → 기본',d:'환율 안정. 정액 투자.'};
-  return{s:1,l:'원화 매우 강세 → 신중',d:'외국인 차익실현 가능성.'};
-}
-
-/* ========== 신호 UI ========== */
-function scoreColor(score){
-  if(score>=4)return{bg:'var(--green-bg)',tx:'var(--green-tx)',bd:'var(--green)'};
-  if(score>=3)return{bg:'var(--teal-bg)',tx:'var(--teal-tx)',bd:'var(--teal)'};
-  if(score>=2)return{bg:'var(--blue-bg)',tx:'var(--blue-tx)',bd:'var(--blue)'};
-  if(score>=1.3)return{bg:'var(--amber-bg)',tx:'var(--amber-tx)',bd:'var(--amber)'};
-  return{bg:'var(--red-bg)',tx:'var(--red-tx)',bd:'var(--red)'};
-}
-function overallLabel(avg){
-  if(avg>=4)return'적극 매수';if(avg>=3)return'매수 우호';if(avg>=2)return'보통';if(avg>=1.3)return'관망';return'매수 자제';
-}
-
-function signalCard(name,val,unit,sig){
-  var c=scoreColor(sig.s);
-  var dots='';
-  for(var i=0;i<5;i++) dots+='<span class="dot'+(i<sig.s?' on':'')+'" style="color:'+c.bd+'"></span>';
-  return '<div class="sc" style="border-left-color:'+c.bd+'">'+
-    '<div class="sl">'+name+'</div>'+
-    '<div class="sv mono" style="color:'+c.tx+'">'+val+unit+'</div>'+
-    '<div class="dots">'+dots+'</div>'+
-    '<div class="sd" style="color:'+c.tx+'">'+sig.l+'</div>'+
-    '<div class="se">'+sig.d+'</div></div>';
-}
-
-function setBadge(id,avg){
-  var c=scoreColor(avg);
-  var el=document.getElementById(id);
-  el.textContent=overallLabel(avg)+' '+avg.toFixed(1);
-  el.style.background=c.bg;
-  el.style.color=c.tx;
-}
+/* 히어로 날씨 맵 */
+var weatherMap=[
+  {min:4,icon:'☀️',label:'맑음 — 적극 매수하세요!',sub:'시장 전반이 매수에 유리한 환경입니다.\n이번 달은 투자금을 늘려도 좋습니다.',bars:5},
+  {min:3,icon:'🌤️',label:'대체로 맑음 — 정상 투자',sub:'양호한 시장입니다.\n계획대로 꾸준히 투자하세요.',bars:4},
+  {min:2,icon:'⛅',label:'흐림 — 평소대로',sub:'특별한 신호 없이 보통입니다.\n정해진 금액만 투자하세요.',bars:3},
+  {min:1.3,icon:'🌧️',label:'비 — 조금만 투자',sub:'시장이 과열 기미입니다.\n이번 달은 투자금을 줄이세요.',bars:2},
+  {min:0,icon:'⛈️',label:'폭풍 — 잠시 멈춤',sub:'시장이 과열 상태입니다.\n최소한만 투자하고 지켜보세요.',bars:1}
+];
 
 function renderSignals(){
   var d=MD;
+  var v1=sigVix(d.vix),v2=sigSpMa(d.spM),v3=sigSpDy(d.spD);var spA=(v1.s+v2.s+v3.s)/3;
+  document.getElementById('sp').innerHTML=sigCard('VIX 공포지수',d.vix,'',v1)+sigCard('S&P500 200일선 이격도',(d.spM>=0?'+':'')+d.spM,'%',v2)+sigCard('S&P500 시가배당률',d.spD,'%',v3);
+  setBdg('spb',spA);
 
-  /* S&P500 */
-  var v1=sigVix(d.vix), v2=sigSpMa(d.spM), v3=sigSpDy(d.spD);
-  var spAvg=(v1.s+v2.s+v3.s)/3;
-  document.getElementById('sp').innerHTML=
-    signalCard('VIX 공포지수',d.vix,'',v1)+
-    signalCard('S&P500 200일선 이격도',(d.spM>=0?'+':'')+d.spM,'%',v2)+
-    signalCard('S&P500 시가배당률',d.spD,'%',v3);
-  setBadge('spb',spAvg);
+  var n1=sigNqRsi(d.nqR),n2=sigNqMa(d.nqM),n3=sigRel(d.nqS);var nqA=(n1.s+n2.s+n3.s)/3;
+  document.getElementById('nq').innerHTML=sigCard('나스닥 RSI (14일)',d.nqR,'',n1)+sigCard('나스닥 200일선 이격도',(d.nqM>=0?'+':'')+d.nqM,'%',n2)+sigCard('나스닥/S&P 상대강도',(d.nqS>=0?'+':'')+d.nqS,'%p',n3);
+  setBdg('nqb',nqA);
 
-  /* 나스닥 */
-  var n1=sigNqRsi(d.nqR), n2=sigNqMa(d.nqM), n3=sigRelStr(d.nqS);
-  var nqAvg=(n1.s+n2.s+n3.s)/3;
-  document.getElementById('nq').innerHTML=
-    signalCard('나스닥 RSI (14일)',d.nqR,'',n1)+
-    signalCard('나스닥 200일선 이격도',(d.nqM>=0?'+':'')+d.nqM,'%',n2)+
-    signalCard('나스닥/S&P 상대강도',(d.nqS>=0?'+':'')+d.nqS,'%p',n3);
-  setBadge('nqb',nqAvg);
+  var d1=sigDjRsi(d.djR),d2=sigDjMa(d.djM),d3=sigDjDy(d.djD);var djA=(d1.s+d2.s+d3.s)/3;
+  document.getElementById('dj').innerHTML=sigCard('다우존스 RSI',d.djR,'',d1)+sigCard('다우 200일선 이격도',(d.djM>=0?'+':'')+d.djM,'%',d2)+sigCard('SCHD 실제 배당률',d.djD,'%',d3);
+  setBdg('djb',djA);
 
-  /* 다우존스 배당 (SCHD) */
-  var d1=sigDjRsi(d.djR), d2=sigDjMa(d.djM), d3=sigDjDy(d.djD);
-  var djAvg=(d1.s+d2.s+d3.s)/3;
-  var dyLabel=d.djD!=null?'SCHD 실제 배당률':'SCHD 배당률 (추정)';
-  document.getElementById('dj').innerHTML=
-    signalCard('다우존스 RSI (14일)',d.djR,'',d1)+
-    signalCard('다우 200일선 이격도',(d.djM>=0?'+':'')+d.djM,'%',d2)+
-    signalCard(dyLabel,d.djD,'%',d3);
-  setBadge('djb',djAvg);
+  var k1=sigKsRsi(d.ksR),k2=sigKsMa(d.ksM),k3=sigUsd(d.ksU);var ksA=(k1.s+k2.s+k3.s)/3;
+  document.getElementById('ks').innerHTML=sigCard('코스피 RSI',d.ksR,'',k1)+sigCard('코스피 200일선 이격도',(d.ksM>=0?'+':'')+d.ksM,'%',k2)+sigCard('원/달러 환율',d.ksU.toLocaleString(),'원',k3);
+  setBdg('ksb',ksA);
 
-  /* 코스피 */
-  var k1=sigKsRsi(d.ksR), k2=sigKsMa(d.ksM), k3=sigUsd(d.ksU);
-  var ksAvg=(k1.s+k2.s+k3.s)/3;
-  document.getElementById('ks').innerHTML=
-    signalCard('코스피 RSI (14일)',d.ksR,'',k1)+
-    signalCard('코스피 200일선 이격도',(d.ksM>=0?'+':'')+d.ksM,'%',k2)+
-    signalCard('원/달러 환율',d.ksU.toLocaleString(),'원',k3);
-  setBadge('ksb',ksAvg);
+  /* 종합 */
+  var w=[Math.max(FUNDS[0].p,5)/100,Math.max(FUNDS[1].p,5)/100,Math.max(FUNDS[2].p,5)/100,Math.max(FUNDS[3].p,5)/100];
+  var avgs=[spA,nqA,djA,ksA];var wS=0;for(var i=0;i<w.length;i++)wS+=w[i];
+  var tA=0;for(var i=0;i<w.length;i++)tA+=w[i]*avgs[i];tA=tA/wS;
 
-  /* 종합: 포트폴리오 비중 가중 평균 */
-  var weights=[
-    Math.max(FUNDS[0].p,5)/100,
-    Math.max(FUNDS[1].p,5)/100,
-    Math.max(FUNDS[2].p,5)/100,
-    Math.max(FUNDS[3].p,5)/100
-  ];
-  var avgs=[spAvg,nqAvg,djAvg,ksAvg];
-  var weightSum=0;
-  for(var i=0;i<weights.length;i++) weightSum+=weights[i];
-  var totalAvg=0;
-  for(var i=0;i<weights.length;i++) totalAvg+=weights[i]*avgs[i];
-  totalAvg=totalAvg/weightSum;
+  /* 히어로 업데이트 */
+  var wm=weatherMap[weatherMap.length-1];
+  for(var i=0;i<weatherMap.length;i++){if(tA>=weatherMap[i].min){wm=weatherMap[i];break}}
+  var oc=scoreColor(tA);
+  document.getElementById('hero-icon').textContent=wm.icon;
+  document.getElementById('hero-label').textContent=wm.label;
+  document.getElementById('hero-label').style.color=oc.tx;
+  document.getElementById('hero-sub').textContent=wm.sub;
+  document.getElementById('hero-card').style.borderColor=oc.bd;
 
-  var oc=scoreColor(totalAvg);
-  var ob=document.getElementById('ob');
-  ob.textContent=overallLabel(totalAvg);
-  ob.style.background=oc.bg;
-  ob.style.color=oc.tx;
+  var gaugeHtml='';var barColors=['var(--red)','var(--amber)','var(--blue)','var(--teal)','var(--green)'];
+  for(var i=0;i<5;i++){var active=i<wm.bars;gaugeHtml+='<span class="bar" style="background:'+(active?barColors[i]:'var(--bd)')+'"></span>'}
+  document.getElementById('hero-gauge').innerHTML=gaugeHtml;
 
-  /* 전략 가이드 */
-  var names=['시장전체(S&P)','나스닥100','미국배당(다우)','코스피(KODEX200)'];
-  var scoreLine='';
-  for(var i=0;i<names.length;i++){
-    if(i>0) scoreLine+=' · ';
-    scoreLine+=names[i]+' '+avgs[i].toFixed(1);
-  }
-  var bestIdx=0, worstIdx=0;
-  for(var i=1;i<avgs.length;i++){
-    if(avgs[i]>avgs[bestIdx]) bestIdx=i;
-    if(avgs[i]<avgs[worstIdx]) worstIdx=i;
-  }
+  var names=['S&P500','나스닥','미국배당','코스피'];
+  var colors=['var(--blue)','var(--purple)','var(--green)','var(--coral)'];
+  var hsHtml='';
+  for(var i=0;i<4;i++){hsHtml+='<span class="hs-item"><span class="hs-dot" style="background:'+colors[i]+'"></span>'+names[i]+' '+avgs[i].toFixed(1)+'</span>'}
+  document.getElementById('hero-scores').innerHTML=hsHtml;
 
-  var stratHtml='';
-  if(totalAvg>=4){
-    stratHtml='<strong style="color:var(--green)">강력 매수 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+scoreLine+'</span><br>전체적으로 매수에 매우 유리합니다. 월 투자금의 <strong>120~150%</strong>까지 확대 고려. 특히 <strong>'+names[bestIdx]+'</strong>('+avgs[bestIdx].toFixed(1)+'점) 신호가 가장 좋으니 해당 ETF 비중을 늘리세요.';
-  }else if(totalAvg>=3){
-    stratHtml='<strong style="color:var(--teal)">매수 우호 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+scoreLine+'</span><br>대체로 양호합니다. 계획한 금액의 <strong>100~120%</strong> 투자. '+(avgs[bestIdx]>3.5?'<strong>'+names[bestIdx]+'</strong> 비중을 약간 높여보세요.':'균형 포트폴리오 유지.');
-  }else if(totalAvg>=2){
-    stratHtml='<strong style="color:var(--blue)">보통 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+scoreLine+'</span><br>정상 시장입니다. <strong>정액 적립식</strong> 투자 유지. '+(avgs[worstIdx]<1.5?'<strong>'+names[worstIdx]+'</strong>('+avgs[worstIdx].toFixed(1)+')이 과열이니 해당 비중을 줄이고 채권으로 분산하세요.':'');
-  }else if(totalAvg>=1.3){
-    stratHtml='<strong style="color:var(--amber)">관망 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+scoreLine+'</span><br>과열 징후가 있습니다. 월 투자금의 <strong>70~80%</strong>만 투자하고 나머지는 이월. '+(avgs[worstIdx]<1.5?'<strong>'+names[worstIdx]+'</strong> 비중을 줄이고 단기채권 확대.':'전반적으로 신중하게 접근하세요.');
-  }else{
-    stratHtml='<strong style="color:var(--red)">매수 자제 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+scoreLine+'</span><br>시장 과열 상태입니다. 월 투자금의 <strong>50%</strong>만 투자. 단기채권 비중 최대한 확대.';
-  }
-  document.getElementById('sb').innerHTML=stratHtml;
+  /* 상세 전략 */
+  var fNames=['시장전체(S&P)','나스닥100','미국배당(다우)','코스피(KODEX200)'];
+  var sLine='';for(var i=0;i<fNames.length;i++){if(i>0)sLine+=' · ';sLine+=fNames[i]+' '+avgs[i].toFixed(1)}
+  var best=0,worst=0;for(var i=1;i<avgs.length;i++){if(avgs[i]>avgs[best])best=i;if(avgs[i]<avgs[worst])worst=i}
+
+  var st='';
+  if(tA>=4)st='<strong style="color:var(--green)">강력 매수 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+sLine+'</span><br>전체적으로 매수에 유리합니다. 월 투자금의 <strong>120~150%</strong> 확대. <strong>'+fNames[best]+'</strong>('+avgs[best].toFixed(1)+') 비중을 늘리세요.';
+  else if(tA>=3)st='<strong style="color:var(--teal)">매수 우호 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+sLine+'</span><br>양호합니다. 계획 금액의 <strong>100~120%</strong> 투자. '+(avgs[best]>3.5?'<strong>'+fNames[best]+'</strong> 비중 약간 확대.':'균형 유지.');
+  else if(tA>=2)st='<strong style="color:var(--blue)">보통 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+sLine+'</span><br>정상 시장. <strong>정액 적립식</strong> 유지. '+(avgs[worst]<1.5?'<strong>'+fNames[worst]+'</strong>('+avgs[worst].toFixed(1)+') 과열 주의. 채권으로 분산.':'');
+  else if(tA>=1.3)st='<strong style="color:var(--amber)">관망 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+sLine+'</span><br>과열 징후. <strong>70~80%</strong>만 투자. '+(avgs[worst]<1.5?'<strong>'+fNames[worst]+'</strong> 비중 줄이고 단기채권.':'신중하게.');
+  else st='<strong style="color:var(--red)">매수 자제 신호</strong><br><span style="font-size:12px;color:var(--tx3)">'+sLine+'</span><br>시장 과열. <strong>50%</strong>만 투자. 단기채권 최대 확대.';
+  document.getElementById('sb').innerHTML=st;
   document.querySelector('.sbox').style.borderLeftColor=oc.bd;
 }
 
-/* ========== 포트폴리오 테이블 ========== */
+/* ================ 포트폴리오 테이블 ================ */
 function buildTable(){
   var m=parseInt(document.getElementById('mo').value);
-  var html='<thead><tr><th>종목</th><th style="text-align:center">비중</th><th>수익률</th><th>분배율</th><th>월 투자금</th></tr></thead><tbody>';
+  var h='<thead><tr><th>종목</th><th style="text-align:center">비중</th><th>수익률</th><th>분배율</th><th>월 투자금</th></tr></thead><tbody>';
   for(var i=0;i<FUNDS.length;i++){
-    var f=FUNDS[i];
-    var mAmt=Math.round(m*f.p/100);
-    html+='<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:'+f.co+';margin-right:6px;vertical-align:middle"></span><span style="font-weight:500">'+f.n+'</span><br><span style="font-size:11px;color:var(--tx3)">'+f.c+'</span></td>';
-    html+='<td style="text-align:center"><input type="range" min="0" max="100" step="5" value="'+f.p+'" data-i="'+i+'" class="as"><span class="mono" style="font-size:12px;font-weight:500" id="p'+i+'">'+f.p+'%</span></td>';
-    html+='<td style="color:var(--green);font-weight:500" class="mono">+'+(f.r*100).toFixed(1)+'%</td>';
-    html+='<td style="color:var(--purple)" class="mono">'+(f.d*100).toFixed(1)+'%</td>';
-    html+='<td style="font-weight:500" class="mono" id="m'+i+'">'+mAmt+'만원</td></tr>';
+    var f=FUNDS[i],a=Math.round(m*f.p/100);
+    h+='<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:'+f.co+';margin-right:6px;vertical-align:middle"></span><span style="font-weight:500">'+f.n+'</span><br><span style="font-size:11px;color:var(--tx3)">'+f.c+'</span></td>';
+    h+='<td style="text-align:center"><input type="range" min="0" max="100" step="5" value="'+f.p+'" data-i="'+i+'" class="as"><span class="mono" style="font-size:12px;font-weight:500" id="p'+i+'">'+f.p+'%</span></td>';
+    h+='<td style="color:var(--green);font-weight:500" class="mono">+'+(f.r*100).toFixed(1)+'%</td>';
+    h+='<td style="color:var(--purple)" class="mono">'+(f.d*100).toFixed(1)+'%</td>';
+    h+='<td style="font-weight:500" class="mono" id="m'+i+'">'+a+'만원</td></tr>';
   }
-  html+='</tbody>';
-  document.getElementById('at').innerHTML=html;
-
+  h+='</tbody>';document.getElementById('at').innerHTML=h;
   var sliders=document.querySelectorAll('.as');
-  for(var j=0;j<sliders.length;j++){
-    sliders[j].addEventListener('input',function(e){
-      var idx=parseInt(e.target.dataset.i);
-      FUNDS[idx].p=parseInt(e.target.value);
-      document.getElementById('p'+idx).textContent=e.target.value+'%';
-      recalc();
-      renderSignals();
-    });
-  }
+  for(var j=0;j<sliders.length;j++){sliders[j].addEventListener('input',function(e){
+    var idx=parseInt(e.target.dataset.i);FUNDS[idx].p=parseInt(e.target.value);
+    document.getElementById('p'+idx).textContent=e.target.value+'%';recalc();renderSignals();})}
 }
+function ps(n,b){var bs=document.querySelectorAll('.pb button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');if(b)b.classList.add('on');var v=PR[n];for(var i=0;i<v.length;i++)FUNDS[i].p=v[i];buildTable();recalc();renderSignals()}
 
-function ps(name,btn){
-  var btns=document.querySelectorAll('.pb button');
-  for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
-  if(btn) btn.classList.add('on');
-  var vals=PR[name];
-  for(var i=0;i<vals.length;i++) FUNDS[i].p=vals[i];
-  buildTable();
-  recalc();
-  renderSignals();
-}
+var moEl=document.getElementById('mo'),yrEl=document.getElementById('yr');
+moEl.addEventListener('input',function(){document.getElementById('ao').textContent=moEl.value+'만원';buildTable();recalc()});
+yrEl.addEventListener('input',function(){document.getElementById('yo').textContent=yrEl.value+'년';recalc()});
 
-/* ========== 슬라이더 이벤트 ========== */
-var moEl=document.getElementById('mo');
-var yrEl=document.getElementById('yr');
-moEl.addEventListener('input',function(){
-  document.getElementById('ao').textContent=moEl.value+'만원';
-  buildTable();
-  recalc();
-});
-yrEl.addEventListener('input',function(){
-  document.getElementById('yo').textContent=yrEl.value+'년';
-  recalc();
-});
-
-/* ========== 시뮬레이션 차트 ========== */
-var growthChartObj=null, divChartObj=null;
-
-function fmt(v){
-  if(v>=10000) return (v/10000).toFixed(1).replace(/\.0$/,'')+'억원';
-  return Math.round(v).toLocaleString()+'만원';
-}
+/* ================ 시뮬레이션 ================ */
+var growthChart=null,divChartObj=null;
+function fmt(v){if(v>=10000)return(v/10000).toFixed(1).replace(/\.0$/,'')+'억원';return Math.round(v).toLocaleString()+'만원'}
 
 function recalc(){
-  var m=parseInt(moEl.value);
-  var y=parseInt(yrEl.value);
+  var m=parseInt(moEl.value),y=parseInt(yrEl.value);
+  var totalPct=0;for(var i=0;i<FUNDS.length;i++)totalPct+=FUNDS[i].p;
+  var tpEl=document.getElementById('tp');tpEl.textContent='합계: '+totalPct+'%';tpEl.style.color=totalPct===100?'var(--tx3)':'var(--red)';
+  for(var i=0;i<FUNDS.length;i++){var el=document.getElementById('m'+i);if(el)el.textContent=Math.round(m*FUNDS[i].p/100)+'만원'}
 
-  /* 비중 합계 체크 */
-  var totalPct=0;
-  for(var i=0;i<FUNDS.length;i++) totalPct+=FUNDS[i].p;
-  var tpEl=document.getElementById('tp');
-  tpEl.textContent='합계: '+totalPct+'%';
-  tpEl.style.color=(totalPct===100)?'var(--tx3)':'var(--red)';
-
-  /* 월 투자금 업데이트 */
-  for(var i=0;i<FUNDS.length;i++){
-    var el=document.getElementById('m'+i);
-    if(el) el.textContent=Math.round(m*FUNDS[i].p/100)+'만원';
-  }
-
-  /* 가중 수익률/분배율 */
-  var wRet=0, wDiv=0;
-  for(var i=0;i<FUNDS.length;i++){
-    wRet+=(FUNDS[i].p/100)*FUNDS[i].r;
-    wDiv+=(FUNDS[i].p/100)*FUNDS[i].d;
-  }
-  var mRet=wRet/12;
-
-  /* 연도별 계산 (1년차부터) */
-  var labels=[], invested=[], totalVal=[], divByYear=[];
-  var cumI=0, cumV=0;
+  var wR=0,wD=0;
+  for(var i=0;i<FUNDS.length;i++){wR+=(FUNDS[i].p/100)*FUNDS[i].r;wD+=(FUNDS[i].p/100)*FUNDS[i].d}
+  var mR=wR/12;
+  var labels=[],inv=[],tv=[],dby=[];var cI=0,cV=0;
   for(var yr=1;yr<=y;yr++){
-    labels.push(yr+'년차');
-    var yearDiv=0;
-    for(var mo=0;mo<12;mo++){
-      cumI+=m;
-      cumV+=m;
-      cumV*=(1+mRet);
-      yearDiv+=cumV*(wDiv/12);
-    }
-    invested.push(Math.round(cumI));
-    totalVal.push(Math.round(cumV));
-    divByYear.push(Math.round(yearDiv));
+    labels.push(yr+'년차');var yd=0;
+    for(var mo=0;mo<12;mo++){cI+=m;cV+=m;cV*=(1+mR);yd+=cV*(wD/12)}
+    inv.push(Math.round(cI));tv.push(Math.round(cV));dby.push(Math.round(yd));
   }
+  var totalProfit=cV-cI;var totalDiv=0;for(var i=0;i<dby.length;i++)totalDiv+=dby[i];
+  var totalGain=totalProfit+totalDiv;
 
-  var totalProfit=cumV-cumI;
-  var totalDivSum=0;
-  for(var i=0;i<divByYear.length;i++) totalDivSum+=divByYear[i];
+  /* 세금 계산 */
+  var cfg=getIsaConfig();
+  var regularTax=Math.round(totalGain*0.154);
+  var isaTaxableGain=Math.max(0,totalGain-cfg.taxFree);
+  var isaTax=Math.round(isaTaxableGain*0.099);
+  var taxSaved=regularTax-isaTax;
 
-  /* 메트릭 카드 */
-  var metrics=[
-    {l:'총 투자원금',v:fmt(cumI),c:''},
-    {l:'예상 평가금액',v:fmt(Math.round(cumV)),c:'var(--blue)'},
-    {l:'예상 수익',v:'+'+fmt(Math.round(totalProfit)),c:'var(--green)'},
-    {l:'누적 분배금',v:'+'+fmt(totalDivSum),c:'var(--purple)'}
-  ];
-  var metHtml='';
-  for(var i=0;i<metrics.length;i++){
-    var x=metrics[i];
-    metHtml+='<div class="me"><div class="ml">'+x.l+'</div><div class="mv mono" style="'+(x.c?'color:'+x.c:'')+'">'+x.v+'</div></div>';
-  }
-  document.getElementById('mt').innerHTML=metHtml;
+  document.getElementById('mt').innerHTML=[
+    {l:'총 투자원금',v:fmt(cI),c:'',h:false},
+    {l:'예상 평가금액',v:fmt(Math.round(cV)),c:'var(--blue)',h:false},
+    {l:'예상 수익',v:'+'+fmt(Math.round(totalProfit)),c:'var(--green)',h:false},
+    {l:'누적 분배금',v:'+'+fmt(totalDiv),c:'var(--purple)',h:false},
+    {l:'ISA 절약 세금',v:'+'+fmt(taxSaved),c:'var(--teal-tx)',h:true}
+  ].map(function(x){
+    return'<div class="me'+(x.h?' highlight':'')+'"><div class="ml">'+x.l+'</div><div class="mv mono" style="'+(x.c?'color:'+x.c:'')+'">'+x.v+'</div></div>';
+  }).join('');
 
-  /* 범례 */
   document.getElementById('gl').innerHTML='<span><i style="background:#2563eb"></i>투자원금</span><span><i style="background:#059669"></i>투자수익</span>';
+  var pf=[];for(var i=0;i<tv.length;i++)pf.push(Math.max(0,tv[i]-inv[i]));
 
-  /* 수익 데이터 */
-  var profitData=[];
-  for(var i=0;i<totalVal.length;i++) profitData.push(Math.max(0,totalVal[i]-invested[i]));
+  if(growthChart)growthChart.destroy();
+  growthChart=new Chart(document.getElementById('gc'),{type:'bar',data:{labels:labels,datasets:[
+    {label:'투자원금',data:inv,backgroundColor:'#2563eb',stack:'a',order:2},
+    {label:'투자수익',data:pf,backgroundColor:'#059669',borderRadius:{topLeft:4,topRight:4},stack:'a',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
+    label:function(c){return c.dataset.label+': '+fmt(c.raw)},
+    afterBody:function(c){return'합계: '+fmt(tv[c[0].dataIndex])}
+  }}},scales:{
+    x:{grid:{display:false},ticks:{color:tickColor,font:{size:12},autoSkip:false}},
+    y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11},callback:function(v){return fmt(v)}},border:{display:false}}
+  }}});
 
-  /* 자산성장 차트 */
-  if(growthChartObj) growthChartObj.destroy();
-  growthChartObj=new Chart(document.getElementById('gc'),{
-    type:'bar',
-    data:{
-      labels:labels,
-      datasets:[
-        {label:'투자원금',data:invested,backgroundColor:'#2563eb',stack:'a',order:2},
-        {label:'투자수익',data:profitData,backgroundColor:'#059669',borderRadius:{topLeft:4,topRight:4},stack:'a',order:1}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{
-        label:function(ctx){return ctx.dataset.label+': '+fmt(ctx.raw)},
-        afterBody:function(ctx){return'합계: '+fmt(totalVal[ctx[0].dataIndex])}
-      }}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:tickColor,font:{size:12},autoSkip:false}},
-        y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11},callback:function(v){return fmt(v)}},border:{display:false}}
-      }
-    }
-  });
-
-  /* 분배금 차트 */
-  if(divChartObj) divChartObj.destroy();
-  divChartObj=new Chart(document.getElementById('dc'),{
-    type:'bar',
-    data:{
-      labels:labels,
-      datasets:[{label:'연간 분배금',data:divByYear,backgroundColor:'#7c3aed',borderRadius:4}]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{
-        label:function(ctx){return'분배금: '+fmt(ctx.raw)+' (월 약 '+fmt(Math.round(ctx.raw/12))+')'}
-      }}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:tickColor,font:{size:12},autoSkip:false}},
-        y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11},callback:function(v){return fmt(v)}},border:{display:false}}
-      }
-    }
-  });
+  if(divChartObj)divChartObj.destroy();
+  divChartObj=new Chart(document.getElementById('dc'),{type:'bar',data:{labels:labels,datasets:[
+    {label:'연간 분배금',data:dby,backgroundColor:'#7c3aed',borderRadius:4}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{
+    label:function(c){return'분배금: '+fmt(c.raw)+' (월 약 '+fmt(Math.round(c.raw/12))+')'}
+  }}},scales:{
+    x:{grid:{display:false},ticks:{color:tickColor,font:{size:12},autoSkip:false}},
+    y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:11},callback:function(v){return fmt(v)}},border:{display:false}}
+  }}});
 }
 
-/* ========== 초기화 ========== */
-buildTable();
-recalc();
-applyFallback();
-renderSignals();
-fetchAll();
+/* ================ 초기화 ================ */
+buildTable();recalc();applyFallback();renderSignals();fetchAll();
 </script>
 </body>
 </html>
