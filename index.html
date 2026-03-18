@@ -164,7 +164,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
     <p>네이버 금융 → 해외지수에서 VIX, RSI를 확인할 수 있습니다. 환율은 포털 검색 "환율"로 확인하세요.</p>
     <div class="manual-grid">
       <div><label>VIX 지수</label><input type="number" id="mv-vix" step="0.1" placeholder="24.0"></div>
-      <div><label>나스닥 RSI (14일)</label><input type="number" id="mv-nqr" step="1" placeholder="42"></div>
+      <div><label>나스닥100 RSI</label><input type="number" id="mv-nqr" step="1" placeholder="54"></div>
       <div><label>SCHD 배당률(%)</label><input type="number" id="mv-djd" step="0.1" placeholder="3.5"></div>
       <div><label>원/달러 환율</label><input type="number" id="mv-usd" step="1" placeholder="1490"></div>
     </div>
@@ -449,7 +449,7 @@ async function fetchAll(){
   var fetches=[
     {key:'vix',fn:function(){return yfetch('^VIX','5d')}},
     {key:'sp',fn:function(){return yfetch('^GSPC')}},
-    {key:'nq',fn:function(){return yfetch('^IXIC')}},
+    {key:'nq',fn:function(){return yfetch('^NDX')}},
     {key:'dj',fn:function(){return yfetch('^DJI')}},
     {key:'ks',fn:function(){return yfetch('^KS11')}},
     {key:'fx',fn:function(){return yfetch('KRW=X','5d')}},
@@ -523,8 +523,8 @@ function applyFallback(){
   if(MD.vix==null){MD.vix=23.8;usedFallback=true}
   if(MD.spM==null){MD.spM=-2;usedFallback=true}
   if(MD.spD==null){MD.spD=1.1;usedFallback=true}
-  if(MD.nqR==null){MD.nqR=44;usedFallback=true}
-  if(MD.nqM==null){MD.nqM=-4;usedFallback=true}
+  if(MD.nqR==null){MD.nqR=54;usedFallback=true}
+  if(MD.nqM==null){MD.nqM=0;usedFallback=true}
   if(MD.nqS==null){MD.nqS=-1;usedFallback=true}
   if(MD.djR==null){MD.djR=48;usedFallback=true}
   if(MD.djM==null){MD.djM=0;usedFallback=true}
