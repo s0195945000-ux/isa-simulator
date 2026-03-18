@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매수신호 가이드 — ISA 투자 시뮬레이션</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f7f4;--bg2:#fff;--bg3:#f0efe9;--tx:#1a1a1a;--tx2:#5c5c5c;--tx3:#9a9a9a;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.12);--blue:#2563eb;--blue-bg:#eff6ff;--blue-tx:#1e40af;--green:#059669;--green-bg:#ecfdf5;--green-tx:#065f46;--amber:#d97706;--amber-bg:#fffbeb;--amber-tx:#92400e;--red:#dc2626;--red-bg:#fef2f2;--red-tx:#991b1b;--purple:#7c3aed;--purple-bg:#f5f3ff;--purple-tx:#5b21b6;--teal:#0d9488;--teal-bg:#f0fdfa;--teal-tx:#115e59;--coral:#e04d2d;--coral-bg:#fff5f2;--coral-tx:#9a3412;--R:12px;--r:8px}
+@media(prefers-color-scheme:dark){:root{--bg:#0f0f0f;--bg2:#1a1a1a;--bg3:#242424;--tx:#e8e8e8;--tx2:#a0a0a0;--tx3:#666;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.12);--blue-bg:#1e3a5f;--blue-tx:#93c5fd;--green-bg:#064e3b;--green-tx:#6ee7b7;--amber-bg:#78350f;--amber-tx:#fcd34d;--red-bg:#7f1d1d;--red-tx:#fca5a5;--purple-bg:#3b1f7a;--purple-tx:#c4b5fd;--teal-bg:#134e4a;--teal-tx:#5eead4;--coral-bg:#6b2010;--coral-tx:#fdba74}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;padding:24px 16px;max-width:760px;margin:0 auto}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* 네비게이션 */
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--tx3);text-decoration:none;font-size:13px;margin-bottom:24px;padding:6px 12px;border-radius:20px;border:1px solid var(--bd);transition:all .2s}
+.back:hover{color:var(--blue);border-color:var(--blue)}
+
+/* 헤더 */
+.page-hdr{margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--bd)}
+.page-hdr h1{font-size:28px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,#2563eb,#059669);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hdr p{font-size:15px;color:var(--tx2);line-height:1.7}
+
+/* 섹션 */
+.section{margin-bottom:40px}
+.section h2{font-size:20px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.section h2 .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-size:14px;font-weight:700;flex-shrink:0}
+.section .section-sub{font-size:13px;color:var(--tx3);margin-bottom:20px}
+.section h3{font-size:16px;font-weight:600;margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+.section p{font-size:14px;color:var(--tx2);margin-bottom:12px}
+
+/* 카드 */
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--R);padding:20px;margin-bottom:16px}
+
+/* 점수 범례 */
+.score-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r);margin-bottom:8px;transition:all .2s}
+.score-row:hover{transform:translateX(4px)}
+.score-dots{display:flex;gap:3px;flex-shrink:0}
+.score-dots .dot{width:10px;height:10px;border-radius:50%;background:var(--bd2)}
+.score-dots .dot.on{background:currentColor}
+.score-label{font-size:14px;font-weight:600;min-width:80px}
+.score-desc{font-size:13px;color:var(--tx2);flex:1}
+
+/* 지표 카드 */
+.indicator-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.indicator{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--R);padding:20px;border-left:4px solid var(--bd2)}
+.indicator .ind-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.indicator .ind-icon{font-size:24px}
+.indicator .ind-title{font-size:15px;font-weight:600}
+.indicator .ind-what{font-size:13px;color:var(--tx2);margin-bottom:12px;padding:10px 14px;background:var(--bg3);border-radius:var(--r)}
+.indicator .ind-why{font-size:13px;color:var(--tx2);margin-bottom:12px}
+
+/* 기준표 */
+.criteria-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.criteria-table th{text-align:left;font-weight:500;font-size:11px;color:var(--tx3);padding:8px 10px;border-bottom:2px solid var(--bd2);text-transform:uppercase;letter-spacing:.5px}
+.criteria-table td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+.criteria-table tr:last-child td{border-bottom:none}
+.criteria-table .range{font-weight:500;white-space:nowrap}
+
+/* 자산군 탭 */
+.asset-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.asset-tab{padding:8px 18px;border:1px solid var(--bd2);border-radius:20px;background:var(--bg2);color:var(--tx2);font-size:13px;cursor:pointer;transition:all .2s;font-family:inherit;display:flex;align-items:center;gap:6px}
+.asset-tab:hover{border-color:var(--blue)}
+.asset-tab.active{color:#fff;border-color:transparent}
+.asset-tab .tab-dot{width:8px;height:8px;border-radius:50%}
+.asset-panel{display:none}
+.asset-panel.active{display:block}
+
+/* 날씨 표 */
+.weather-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+@media(max-width:640px){.weather-grid{grid-template-columns:repeat(3,1fr)}}
+.weather-item{text-align:center;padding:16px 8px;border-radius:var(--r);background:var(--bg3)}
+.weather-item .wi-icon{font-size:32px;margin-bottom:4px}
+.weather-item .wi-label{font-size:12px;font-weight:600;margin-bottom:2px}
+.weather-item .wi-score{font-size:11px;color:var(--tx3)}
+.weather-item .wi-action{font-size:11px;margin-top:4px;font-weight:500}
+
+/* 실전 가이드 */
+.step-list{counter-reset:step}
+.step{counter-increment:step;padding:16px 16px 16px 56px;position:relative;margin-bottom:12px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r)}
+.step:before{content:counter(step);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.step .step-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.step .step-desc{font-size:13px;color:var(--tx2)}
+
+/* 역사적 사례 */
+.case{padding:16px;border-radius:var(--r);margin-bottom:12px;border-left:3px solid}
+.case .case-date{font-size:12px;font-weight:600;margin-bottom:4px}
+.case .case-signals{font-size:12px;color:var(--tx2);margin-bottom:6px}
+.case .case-result{font-size:13px;font-weight:500}
+
+/* FAQ */
+.faq{margin-bottom:12px;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;background:var(--bg2);font-size:14px;font-weight:500}
+.faq-q .faq-arrow{font-size:12px;color:var(--tx3);transition:transform .3s}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-a-inner{padding:0 16px 14px;font-size:13px;color:var(--tx2);line-height:1.7}
+
+/* 하단 CTA */
+.cta{text-align:center;padding:32px 20px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--R);margin-top:40px}
+.cta h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.cta p{font-size:14px;color:var(--tx2);margin-bottom:16px}
+.cta a{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--blue);color:#fff;text-decoration:none;border-radius:var(--R);font-size:15px;font-weight:600;transition:opacity .2s}
+.cta a:hover{opacity:.9}
+
+.fn{background:var(--bg3);border-radius:var(--r);padding:14px 16px;font-size:12px;color:var(--tx3);line-height:1.7;margin-top:20px}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← 시뮬레이터로 돌아가기</a>
+
+<div class="page-hdr">
+  <h1>📖 매수신호 가이드</h1>
+  <p>ISA 계좌에서 매월 적립식 투자를 할 때, 시뮬레이터가 보여주는 매수신호의 의미와 활용법을 설명합니다. 처음 한 번만 읽으시면 됩니다.</p>
+</div>
+
+
+<!-- ===== 1. 기본 개념 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--blue-bg);color:var(--blue-tx)">1</span>매수신호란?</h2>
+  <p class="section-sub">가장 기본적인 개념부터 알아봅니다</p>
+
+  <p>적립식 투자는 매월 정해진 날에 꾸준히 투자하는 방법입니다. 그런데 같은 금액을 넣더라도, <strong>시장이 싸게 느껴질 때 조금 더 넣고, 비싸게 느껴질 때 조금 줄이면</strong> 장기적으로 더 좋은 수익을 기대할 수 있습니다.</p>
+
+  <p>매수신호는 지금 시장이 어떤 상태인지를 숫자와 날씨 아이콘으로 쉽게 보여줍니다. 어렵게 생각하실 필요 없이, <strong>시뮬레이터 첫 화면의 날씨만 확인</strong>하시면 됩니다.</p>
+
+  <div class="weather-grid">
+    <div class="weather-item">
+      <div class="wi-icon">☀️</div>
+      <div class="wi-label">맑음</div>
+      <div class="wi-score">4~5점</div>
+      <div class="wi-action" style="color:var(--green-tx)">적극 매수!</div>
+    </div>
+    <div class="weather-item">
+      <div class="wi-icon">🌤️</div>
+      <div class="wi-label">대체로 맑음</div>
+      <div class="wi-score">3~4점</div>
+      <div class="wi-action" style="color:var(--teal-tx)">정상 투자</div>
+    </div>
+    <div class="weather-item">
+      <div class="wi-icon">⛅</div>
+      <div class="wi-label">흐림</div>
+      <div class="wi-score">2~3점</div>
+      <div class="wi-action" style="color:var(--blue-tx)">평소대로</div>
+    </div>
+    <div class="weather-item">
+      <div class="wi-icon">🌧️</div>
+      <div class="wi-label">비</div>
+      <div class="wi-score">1.3~2점</div>
+      <div class="wi-action" style="color:var(--amber-tx)">조금만</div>
+    </div>
+    <div class="weather-item">
+      <div class="wi-icon">⛈️</div>
+      <div class="wi-label">폭풍</div>
+      <div class="wi-score">1~1.3점</div>
+      <div class="wi-action" style="color:var(--red-tx)">잠시 멈춤</div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--tx3)">💡 중요: "맑음"이라고 해서 무조건 수익이 나는 것은 아니고, "폭풍"이라고 해서 손실이 확정되는 것도 아닙니다. 역사적으로 이 시점에 투자했을 때 좋은 결과가 나올 확률이 높았다는 의미입니다.</p>
+</div>
+
+
+<!-- ===== 2. 점수 체계 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--green-bg);color:var(--green-tx)">2</span>점수는 어떻게 읽나요?</h2>
+  <p class="section-sub">1~5점의 의미와 각 점수에서의 행동 지침</p>
+
+  <p>시뮬레이터는 12개의 지표를 분석하여 각각 1~5점을 매깁니다. 점이 많이 채워질수록 매수에 유리한 상태입니다.</p>
+
+  <div class="score-row" style="background:var(--green-bg)">
+    <div class="score-dots" style="color:var(--green)"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div>
+    <span class="score-label" style="color:var(--green-tx)">5점 적극 매수</span>
+    <span class="score-desc">극히 드문 기회. 시장이 패닉 상태일 때 나타납니다. 여유 자금이 있다면 투자금을 크게 늘리세요.</span>
+  </div>
+  <div class="score-row" style="background:var(--green-bg)">
+    <div class="score-dots" style="color:var(--green)"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div>
+    <span class="score-label" style="color:var(--green-tx)">4점 매수 확대</span>
+    <span class="score-desc">좋은 매수 기회. 월 투자금의 120~150%를 투자해도 좋습니다.</span>
+  </div>
+  <div class="score-row" style="background:var(--teal-bg)">
+    <div class="score-dots" style="color:var(--teal)"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+    <span class="score-label" style="color:var(--teal-tx)">3점 매수 우호</span>
+    <span class="score-desc">시장이 약간 저평가. 계획대로 투자하되 약간 늘려도 됩니다.</span>
+  </div>
+  <div class="score-row" style="background:var(--blue-bg)">
+    <div class="score-dots" style="color:var(--blue)"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    <span class="score-label" style="color:var(--blue-tx)">2점 보통</span>
+    <span class="score-desc">시장이 정상적으로 움직이고 있습니다. 변경 없이 계획대로 투자하세요.</span>
+  </div>
+  <div class="score-row" style="background:var(--red-bg)">
+    <div class="score-dots" style="color:var(--red)"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    <span class="score-label" style="color:var(--red-tx)">1점 매수 자제</span>
+    <span class="score-desc">시장이 과열 상태. 투자금을 줄이고 단기채권 비중을 높이세요.</span>
+  </div>
+</div>
+
+
+<!-- ===== 3. 지표 상세 설명 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--purple-bg);color:var(--purple-tx)">3</span>12개 지표 상세 설명</h2>
+  <p class="section-sub">4개 자산군 × 3개 지표 = 12개. 각 지표가 무엇을 측정하고 왜 중요한지 설명합니다.</p>
+
+  <div class="asset-tabs">
+    <button class="asset-tab active" onclick="showAsset('sp')" style="background:var(--blue);color:#fff"><span class="tab-dot" style="background:#fff"></span>시장 전체 (S&P500)</button>
+    <button class="asset-tab" onclick="showAsset('nq')"><span class="tab-dot" style="background:var(--purple)"></span>나스닥100</button>
+    <button class="asset-tab" onclick="showAsset('dj')"><span class="tab-dot" style="background:var(--green)"></span>미국배당 (SCHD)</button>
+    <button class="asset-tab" onclick="showAsset('ks')"><span class="tab-dot" style="background:var(--coral)"></span>코스피</button>
+  </div>
+
+  <!-- S&P500 -->
+  <div class="asset-panel active" id="panel-sp">
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:16px">S&P500은 미국 상위 500개 기업의 종합 지수로, 전 세계 주식시장의 바로미터입니다. 이 지표들은 시장 전체의 분위기를 반영하므로 모든 자산군에 간접적으로 영향을 줍니다.</p>
+
+    <div class="indicator" style="border-left-color:var(--blue)">
+      <div class="ind-header"><span class="ind-icon">😱</span><span class="ind-title">VIX 공포지수</span></div>
+      <div class="ind-what"><strong>무엇을 측정하나요?</strong><br>VIX는 향후 30일간 S&P500의 예상 변동 폭을 나타냅니다. 투자자들이 두려워할수록 VIX가 올라갑니다. "공포지수"라고 불리는 이유입니다.</div>
+      <div class="ind-why"><strong>왜 매수신호에 사용하나요?</strong><br>역설적이지만, 모든 사람이 두려워할 때가 오히려 주가가 가장 싼 시점인 경우가 많습니다. 워렌 버핏의 명언 "남들이 두려워할 때 욕심을 부려라"와 같은 원리입니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>VIX 범위</th><th>점수</th><th>시장 상태</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">40 이상</td><td>5점</td><td>극도의 공포 (패닉)</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">30~40</td><td>4점</td><td>공포</td><td style="color:var(--green-tx)">분할 매수</td></tr>
+          <tr><td class="range">20~30</td><td>2점</td><td>불안</td><td>기본 비중 유지</td></tr>
+          <tr><td class="range">15~20</td><td>2점</td><td>안정 (정상)</td><td>계획대로</td></tr>
+          <tr><td class="range">15 미만</td><td>1점</td><td>지나친 낙관</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--blue)">
+      <div class="ind-header"><span class="ind-icon">📏</span><span class="ind-title">200일선 이격도</span></div>
+      <div class="ind-what"><strong>무엇을 측정하나요?</strong><br>최근 200거래일 동안의 평균 주가(200일 이동평균선) 대비 현재 주가가 어디에 있는지를 %로 표시합니다. 예를 들어 -10%이면 "장기 평균보다 10% 싸다"는 뜻입니다.</div>
+      <div class="ind-why"><strong>왜 매수신호에 사용하나요?</strong><br>200일선은 주식시장에서 가장 널리 쓰이는 장기 추세선입니다. 현재 주가가 이 선보다 많이 아래에 있으면 역사적으로 저점 근처일 가능성이 높습니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>이격도</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">-20% 이하</td><td>5점</td><td>역사적 저점 구간</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">-10% ~ -20%</td><td>4점</td><td>크게 하회</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">-3% ~ -10%</td><td>3점</td><td>소폭 하회</td><td>매수 우호</td></tr>
+          <tr><td class="range">-3% ~ +10%</td><td>2점</td><td>정상 범위</td><td>기본 투자</td></tr>
+          <tr><td class="range">+10% 이상</td><td>1점</td><td>과열 가능</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--blue)">
+      <div class="ind-header"><span class="ind-icon">💰</span><span class="ind-title">시가배당률</span></div>
+      <div class="ind-what"><strong>무엇을 측정하나요?</strong><br>S&P500 기업들이 1년간 지급하는 배당금 합계를 현재 지수 가격으로 나눈 비율입니다. 쉽게 말해, 주가 대비 배당이 얼마나 되는지를 보여줍니다.</div>
+      <div class="ind-why"><strong>왜 매수신호에 사용하나요?</strong><br>배당금은 기업 이익에서 나오므로 크게 변하지 않습니다. 그런데 주가가 떨어지면 배당률이 올라갑니다. 즉, <strong>배당률이 높다 = 주가가 싸다</strong>는 간접 신호입니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>배당률</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">3.0% 이상</td><td>5점</td><td>강한 저평가</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">2.2~3.0%</td><td>4점</td><td>저평가</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">1.5~2.2%</td><td>3점</td><td>역사 평균</td><td>정상 투자</td></tr>
+          <tr><td class="range">1.2~1.5%</td><td>2점</td><td>다소 고평가</td><td>기본 비중</td></tr>
+          <tr><td class="range">1.2% 미만</td><td>1점</td><td>역사적 고평가</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 나스닥 -->
+  <div class="asset-panel" id="panel-nq">
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:16px">나스닥100은 애플, 마이크로소프트, 엔비디아 등 기술·성장주 중심의 지수입니다. S&P500보다 변동성이 2~3배 크기 때문에 전용 지표가 필요합니다.</p>
+
+    <div class="indicator" style="border-left-color:var(--purple)">
+      <div class="ind-header"><span class="ind-icon">📊</span><span class="ind-title">RSI (14일, 상대강도지수)</span></div>
+      <div class="ind-what"><strong>무엇을 측정하나요?</strong><br>최근 14거래일 동안 주가가 오른 날과 내린 날의 비율을 0~100 사이 숫자로 나타냅니다. 70 이상이면 "너무 많이 올랐다(과매수)", 30 이하이면 "너무 많이 떨어졌다(과매도)"를 의미합니다.</div>
+      <div class="ind-why"><strong>왜 나스닥에 중요한가요?</strong><br>나스닥은 급등과 급락이 잦아서, RSI가 VIX보다 더 빠르게 타이밍 신호를 줍니다. 나스닥 RSI가 30 이하로 떨어지면 역사적으로 1~3개월 내 강한 반등이 나온 경우가 많았습니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>RSI</th><th>점수</th><th>상태</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">25 이하</td><td>5점</td><td>극도 과매도</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">25~30</td><td>4점</td><td>과매도</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">30~45</td><td>3점</td><td>약세</td><td>매수 우호</td></tr>
+          <tr><td class="range">45~70</td><td>2점</td><td>중립 (정상)</td><td>기본 투자</td></tr>
+          <tr><td class="range">70 이상</td><td>1점</td><td>과매수</td><td style="color:var(--red-tx)">자제</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--purple)">
+      <div class="ind-header"><span class="ind-icon">📏</span><span class="ind-title">나스닥 200일선 이격도</span></div>
+      <div class="ind-what"><strong>S&P500과 뭐가 다른가요?</strong><br>계산 방법은 동일하지만, 나스닥은 변동성이 크므로 정상 범위를 더 넓게 봅니다. S&P500은 ±10%를 정상으로 보지만, 나스닥은 <strong>±15%까지 정상</strong>입니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>이격도</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">-25% 이하</td><td>5점</td><td>극단 저점</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">-12% ~ -25%</td><td>4점</td><td>크게 하회</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">-5% ~ -12%</td><td>3점</td><td>소폭 하회</td><td>매수 우호</td></tr>
+          <tr><td class="range">-5% ~ +15%</td><td>2점</td><td>정상</td><td>기본 투자</td></tr>
+          <tr><td class="range">+15% 이상</td><td>1점</td><td>과열</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--purple)">
+      <div class="ind-header"><span class="ind-icon">⚖️</span><span class="ind-title">나스닥/S&P 상대강도 (20일)</span></div>
+      <div class="ind-what"><strong>무엇을 측정하나요?</strong><br>최근 20거래일 동안 나스닥의 수익률에서 S&P500의 수익률을 뺀 값입니다. -8%p이면 "나스닥이 S&P보다 8%포인트 더 떨어졌다"는 뜻입니다.</div>
+      <div class="ind-why"><strong>왜 이 지표가 필요한가요?</strong><br>시장 전체가 보통인데 나스닥만 유독 떨어질 때가 있습니다. 이때가 성장주를 싸게 살 수 있는 기회입니다. 반대로 나스닥만 크게 앞서갔다면 조정 가능성이 높습니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>상대강도</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">-8%p 이하</td><td>5점</td><td>나스닥 크게 부진</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">-4%p ~ -8%p</td><td>4점</td><td>나스닥 부진</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">-4%p ~ +2%p</td><td>3점</td><td>비슷한 흐름</td><td>정상</td></tr>
+          <tr><td class="range">+2%p ~ +6%p</td><td>2점</td><td>나스닥 우세</td><td>기본</td></tr>
+          <tr><td class="range">+6%p 이상</td><td>1점</td><td>나스닥 과열</td><td style="color:var(--red-tx)">자제</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 미국배당 -->
+  <div class="asset-panel" id="panel-dj">
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:16px">KODEX 미국배당다우존스가 추종하는 Dow Jones U.S. Dividend 100 Index는 미국의 안정적인 배당주 100종목으로 구성됩니다. 미국 ETF 중 SCHD가 같은 지수를 추종하므로, SCHD의 실제 데이터를 사용합니다.</p>
+
+    <div class="indicator" style="border-left-color:var(--green)">
+      <div class="ind-header"><span class="ind-icon">📊</span><span class="ind-title">다우존스 RSI (14일)</span></div>
+      <div class="ind-what"><strong>배당주의 RSI는 왜 기준이 다른가요?</strong><br>배당주는 성장주보다 변동성이 작아서, RSI 35 이하면 이미 상당한 하락이 있었다는 뜻입니다. 나스닥의 기준(30 이하)보다 높은 35를 과매도 기준으로 사용합니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>RSI</th><th>점수</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">25 이하</td><td>5점</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">25~35</td><td>4점</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">35~50</td><td>3점</td><td>매수 우호</td></tr>
+          <tr><td class="range">50~70</td><td>2점</td><td>기본</td></tr>
+          <tr><td class="range">70 이상</td><td>1점</td><td style="color:var(--red-tx)">자제</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--green)">
+      <div class="ind-header"><span class="ind-icon">📏</span><span class="ind-title">다우 200일선 이격도</span></div>
+      <div class="ind-what"><strong>기준이 왜 S&P보다 좁은가요?</strong><br>배당주는 주가 변동이 작습니다. 다우지수가 200일선 대비 ±8%를 넘어가는 경우가 드물기 때문에, 이 범위를 정상으로 봅니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>이격도</th><th>점수</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">-15% 이하</td><td>5점</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">-8% ~ -15%</td><td>4점</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">-3% ~ -8%</td><td>3점</td><td>매수 우호</td></tr>
+          <tr><td class="range">-3% ~ +8%</td><td>2점</td><td>기본</td></tr>
+          <tr><td class="range">+8% 이상</td><td>1점</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--green)">
+      <div class="ind-header"><span class="ind-icon">💵</span><span class="ind-title">SCHD 실제 배당률</span></div>
+      <div class="ind-what"><strong>왜 "실제" 배당률인가요?</strong><br>시뮬레이터는 SCHD ETF가 최근 12개월간 실제로 지급한 분배금 합계를 현재 주가로 나누어 배당률을 계산합니다. 추정치가 아닌 실측치이므로 신뢰도가 높습니다. SCHD의 역사적 평균 배당률은 약 3.2~3.8%입니다.</div>
+      <div class="ind-why"><strong>배당 투자자에게 왜 핵심 지표인가요?</strong><br>배당률이 높다는 것은 ① 주가가 떨어져서 상대적으로 배당이 높아졌거나, ② 기업들이 배당을 늘렸다는 뜻입니다. 어느 쪽이든 배당 투자자에게는 유리한 상황입니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>SCHD 배당률</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">4.5% 이상</td><td>5점</td><td>배당 투자 최적기</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">3.8~4.5%</td><td>4점</td><td>평균 상회</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">3.2~3.8%</td><td>3점</td><td>평균 수준</td><td>정상 투자</td></tr>
+          <tr><td class="range">2.5~3.2%</td><td>2점</td><td>다소 고평가</td><td>기본 비중</td></tr>
+          <tr><td class="range">2.5% 미만</td><td>1점</td><td>고평가</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 코스피 -->
+  <div class="asset-panel" id="panel-ks">
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:16px">KODEX 200은 코스피200 지수를 추종합니다. 한국 시장은 수출 의존도가 높아 환율의 영향을 크게 받으므로, 원/달러 환율을 핵심 지표로 사용합니다.</p>
+
+    <div class="indicator" style="border-left-color:var(--coral)">
+      <div class="ind-header"><span class="ind-icon">📊</span><span class="ind-title">코스피 RSI (14일)</span></div>
+      <div class="ind-what">나스닥이나 다우와 동일한 RSI이지만, 코스피 지수에 적용됩니다. 코스피는 변동성이 S&P보다 크고 나스닥보다 작아서, RSI 35 이하를 과매도 기준으로 봅니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>RSI</th><th>점수</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">25 이하</td><td>5점</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">25~35</td><td>4점</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">35~50</td><td>3점</td><td>매수 우호</td></tr>
+          <tr><td class="range">50~70</td><td>2점</td><td>기본</td></tr>
+          <tr><td class="range">70 이상</td><td>1점</td><td style="color:var(--red-tx)">자제</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--coral)">
+      <div class="ind-header"><span class="ind-icon">📏</span><span class="ind-title">코스피 200일선 이격도</span></div>
+      <div class="ind-what">코스피의 장기 평균(200일선) 대비 현재 위치입니다. 한국 시장은 박스권 장세가 많아, 200일선 하회 시 반등 확률이 미국보다 높은 편입니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>이격도</th><th>점수</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">-20% 이하</td><td>5점</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">-10% ~ -20%</td><td>4점</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">-3% ~ -10%</td><td>3점</td><td>매수 우호</td></tr>
+          <tr><td class="range">-3% ~ +8%</td><td>2점</td><td>기본</td></tr>
+          <tr><td class="range">+8% 이상</td><td>1점</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="indicator" style="border-left-color:var(--coral)">
+      <div class="ind-header"><span class="ind-icon">💱</span><span class="ind-title">원/달러 환율</span></div>
+      <div class="ind-what"><strong>환율이 왜 코스피 매수신호인가요?</strong><br>한국 증시에서 외국인 투자자의 비중은 약 30~35%입니다. 원화가 약세(환율 상승)이면 외국인이 원화 자산을 매도하며 코스피가 떨어집니다. 그런데 이 외국인 매도가 과도해지면, 코스피가 실제 가치보다 더 많이 떨어지는 경우가 있습니다. 이때가 국내 투자자에게는 매수 기회입니다.</div>
+      <div class="ind-why"><strong>역사적 근거:</strong> 환율이 1,400원을 넘었던 시기(2022년 10월, 2008년 등)에 코스피를 매수한 투자자들은 이후 상당한 수익을 거둔 사례가 많습니다.</div>
+      <table class="criteria-table">
+        <thead><tr><th>원/달러 환율</th><th>점수</th><th>의미</th><th>행동</th></tr></thead>
+        <tbody>
+          <tr><td class="range">1,450원 이상</td><td>5점</td><td>원화 약세 극단</td><td style="color:var(--green-tx);font-weight:500">적극 매수</td></tr>
+          <tr><td class="range">1,380~1,450원</td><td>4점</td><td>원화 약세</td><td style="color:var(--green-tx)">매수 확대</td></tr>
+          <tr><td class="range">1,300~1,380원</td><td>3점</td><td>중립</td><td>정상 투자</td></tr>
+          <tr><td class="range">1,200~1,300원</td><td>2점</td><td>원화 강세</td><td>기본 비중</td></tr>
+          <tr><td class="range">1,200원 미만</td><td>1점</td><td>원화 매우 강세</td><td style="color:var(--red-tx)">신중</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 4. 종합 신호 계산 원리 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--teal-bg);color:var(--teal-tx)">4</span>종합 신호는 어떻게 계산되나요?</h2>
+  <p class="section-sub">12개 지표가 하나의 날씨 아이콘으로 합쳐지는 과정</p>
+
+  <p>4개 자산군(S&P500, 나스닥, 미국배당, 코스피)에 각 3개 지표가 있으므로, 각 자산군의 평균 점수가 먼저 계산됩니다.</p>
+  <p>그 다음, 이 4개의 평균 점수를 <strong>현재 포트폴리오 비중에 비례</strong>하여 가중 평균합니다. 예를 들어 나스닥 ETF 비중이 35%이면 나스닥 점수가 종합 점수에 더 많이 반영됩니다.</p>
+  <p>이 방식 덕분에, 포트폴리오 설정을 바꾸면 종합 신호도 자동으로 달라집니다. 성장형 포트폴리오에서는 나스닥 신호가, 배당형에서는 SCHD 신호가 더 중요해집니다.</p>
+
+  <div class="card" style="background:var(--bg3)">
+    <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin:0">
+      <strong>계산 예시:</strong><br>
+      S&P500 점수 3.0 × 비중 30% = 0.90<br>
+      나스닥 점수 4.0 × 비중 35% = 1.40<br>
+      미국배당 점수 2.5 × 비중 20% = 0.50<br>
+      코스피 점수 3.0 × 비중 15% = 0.45<br>
+      종합 = (0.90 + 1.40 + 0.50 + 0.45) ÷ 1.00 = <strong>3.25 → 🌤️ 매수 우호</strong>
+    </p>
+  </div>
+</div>
+
+
+<!-- ===== 5. 실전 투자일 체크리스트 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--amber-bg);color:var(--amber-tx)">5</span>매월 투자일 체크리스트</h2>
+  <p class="section-sub">실제로 매월 투자할 때 이 순서대로 따라하세요</p>
+
+  <div class="step-list">
+    <div class="step">
+      <div class="step-title">시뮬레이터를 열고 날씨 아이콘을 확인합니다</div>
+      <div class="step-desc">☀️이면 투자금을 늘리고, ⛈️이면 줄입니다. ⛅이면 평소대로 투자합니다. 이것만으로도 충분합니다.</div>
+    </div>
+    <div class="step">
+      <div class="step-title">(선택) 상세 신호를 확인합니다</div>
+      <div class="step-desc">"상세 매수신호"를 열면 4개 자산군별 점수를 볼 수 있습니다. 특정 자산군만 점수가 높다면 해당 ETF 비중을 약간 높여볼 수 있습니다.</div>
+    </div>
+    <div class="step">
+      <div class="step-title">증권사 앱에서 매수를 실행합니다</div>
+      <div class="step-desc">시뮬레이터의 종목별 "월 투자금" 금액을 참고하여 각 ETF를 매수합니다. 시장가 주문이 가장 간편합니다.</div>
+    </div>
+    <div class="step">
+      <div class="step-title">그리고 다음 달까지 잊습니다</div>
+      <div class="step-desc">적립식 투자의 최대 장점은 매일 시세를 확인할 필요가 없다는 것입니다. 월 1회 매수 후에는 편하게 지내세요.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== 6. 역사적 사례 ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--coral-bg);color:var(--coral-tx)">6</span>실제로 이 신호가 맞았을까?</h2>
+  <p class="section-sub">과거 주요 시점에서 신호가 어떻게 나왔고, 이후 어떤 결과가 있었는지 살펴봅니다</p>
+
+  <div class="case" style="border-color:var(--green);background:var(--green-bg)">
+    <div class="case-date" style="color:var(--green-tx)">2022년 10월 — ☀️ 적극 매수 신호</div>
+    <div class="case-signals">VIX 33 (4점) / S&P500 200일선 -18% (4점) / 나스닥 RSI 28 (4점) / 환율 1,440원 (5점)</div>
+    <div class="case-result" style="color:var(--green-tx)">→ 이후 12개월간 S&P500 +22%, 나스닥 +45% 상승</div>
+  </div>
+
+  <div class="case" style="border-color:var(--green);background:var(--green-bg)">
+    <div class="case-date" style="color:var(--green-tx)">2020년 3월 (코로나 저점) — ☀️ 적극 매수 신호</div>
+    <div class="case-signals">VIX 82 (5점) / S&P500 200일선 -28% (5점) / 나스닥 RSI 22 (5점) / 환율 1,280원 (3점)</div>
+    <div class="case-result" style="color:var(--green-tx)">→ 이후 12개월간 S&P500 +75%, 나스닥 +90% 상승</div>
+  </div>
+
+  <div class="case" style="border-color:var(--amber);background:var(--amber-bg)">
+    <div class="case-date" style="color:var(--amber-tx)">2021년 11월 — 🌧️ 관망 신호</div>
+    <div class="case-signals">VIX 17 (2점) / S&P500 200일선 +14% (1점) / 나스닥 RSI 72 (1점) / 배당률 1.2% (1점)</div>
+    <div class="case-result" style="color:var(--amber-tx)">→ 이후 12개월간 S&P500 -15%, 나스닥 -30% 하락</div>
+  </div>
+
+  <p style="font-size:13px;color:var(--tx3);margin-top:12px">※ 과거 사례가 미래 수익을 보장하지는 않습니다. 하지만 이런 극단적인 지표 조합은 역사적으로 유의미한 패턴을 보여왔습니다.</p>
+</div>
+
+
+<!-- ===== 7. FAQ ===== -->
+<div class="section">
+  <h2><span class="num" style="background:var(--bg3);color:var(--tx2)">7</span>자주 묻는 질문</h2>
+  <p class="section-sub">궁금할 수 있는 점들을 미리 정리했습니다</p>
+
+  <div class="faq">
+    <div class="faq-q" onclick="toggleFaq(this)">매달 꼭 이 신호를 봐야 하나요?<span class="faq-arrow">▼</span></div>
+    <div class="faq-a"><div class="faq-a-inner">아닙니다. 적립식 투자의 가장 좋은 전략은 "정해진 금액을 매달 꾸준히 넣는 것"입니다. 매수신호는 약간의 최적화를 더하는 도구일 뿐, 이것 때문에 스트레스받으시면 그냥 무시하고 정액 투자하셔도 충분합니다.</div></div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-q" onclick="toggleFaq(this)">"폭풍" 신호가 뜨면 투자를 완전히 멈춰야 하나요?<span class="faq-arrow">▼</span></div>
+    <div class="faq-a"><div class="faq-a-inner">완전히 멈추는 것은 권하지 않습니다. ISA의 연간 납입한도가 있으므로, 나중에 몰아서 넣기 어렵습니다. "폭풍" 때에도 최소 50%는 넣고, 줄인 금액을 다음 달 "맑음"이 나올 때 추가로 넣는 방식이 좋습니다.</div></div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-q" onclick="toggleFaq(this)">데이터가 안 불러와지면 어떻게 하나요?<span class="faq-arrow">▼</span></div>
+    <div class="faq-a"><div class="faq-a-inner">시뮬레이터에 "직접 입력" 버튼이 있습니다. 네이버 금융에서 VIX(CBOE 변동성지수 검색), 나스닥 RSI(기술적 분석 탭), 환율을 확인하고 수동 입력하시면 됩니다. 자주 발생하는 문제는 아니지만, 야후 파이낸스 서버가 일시적으로 느릴 때 사용할 수 있습니다.</div></div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-q" onclick="toggleFaq(this)">SCHD 배당률과 KODEX 미국배당다우존스의 배당률은 같은 건가요?<span class="faq-arrow">▼</span></div>
+    <div class="faq-a"><div class="faq-a-inner">같은 지수(Dow Jones U.S. Dividend 100)를 추종하므로 구성 종목과 배당 수준이 거의 동일합니다. 다만 KODEX는 한국에 상장된 ETF이므로 환율과 운용보수 차이로 소수점 단위의 차이가 있을 수 있습니다. SCHD의 배당률을 KODEX의 참고 지표로 사용해도 충분합니다.</div></div>
+  </div>
+
+  <div class="faq">
+    <div class="faq-q" onclick="toggleFaq(this)">이 신호만 보고 투자해도 되나요?<span class="faq-arrow">▼</span></div>
+    <div class="faq-a"><div class="faq-a-inner">이 신호는 "참고 도구"이지 "투자 지시"가 아닙니다. 시장에는 지표로 측정할 수 없는 변수(전쟁, 팬데믹, 정책 변화 등)가 항상 존재합니다. 가장 중요한 원칙은 ① 분산투자 ② 장기투자 ③ 꾸준한 적립입니다. 매수신호는 이 원칙 위에 작은 최적화를 더하는 것입니다.</div></div>
+  </div>
+</div>
+
+
+<!-- ===== CTA ===== -->
+<div class="cta">
+  <h3>이제 시뮬레이터를 사용해 보세요</h3>
+  <p>가이드를 읽으셨으니, 이제 실제 매수신호를 확인하고 투자 시뮬레이션을 해볼 차례입니다.</p>
+  <a href="index.html">시뮬레이터로 이동 →</a>
+</div>
+
+<div class="fn">
+  본 가이드는 투자 교육 목적으로 작성되었으며, 특정 종목의 매수·매도를 권유하지 않습니다.<br>
+  모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.
+</div>
+
+<script>
+function showAsset(id){
+  var panels=document.querySelectorAll('.asset-panel');
+  var tabs=document.querySelectorAll('.asset-tab');
+  for(var i=0;i<panels.length;i++)panels[i].classList.remove('active');
+  for(var i=0;i<tabs.length;i++){tabs[i].classList.remove('active');tabs[i].style.background='';tabs[i].style.color=''}
+  document.getElementById('panel-'+id).classList.add('active');
+  var colors={sp:'var(--blue)',nq:'var(--purple)',dj:'var(--green)',ks:'var(--coral)'};
+  var activeTab=event.currentTarget;
+  activeTab.classList.add('active');
+  activeTab.style.background=colors[id];
+  activeTab.style.color='#fff';
+}
+function toggleFaq(el){
+  var answer=el.nextElementSibling;
+  var arrow=el.querySelector('.faq-arrow');
+  if(answer.style.maxHeight){
+    answer.style.maxHeight=null;
+    arrow.style.transform='';
+  }else{
+    answer.style.maxHeight=answer.scrollHeight+'px';
+    arrow.style.transform='rotate(180deg)';
+  }
+}
+</script>
+</body>
+</html>
