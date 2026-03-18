@@ -149,6 +149,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div class="hero-sub" id="hero-sub" style="color:var(--tx2)">데이터를 불러오고 있습니다</div>
   <div class="hero-gauge" id="hero-gauge"></div>
   <div class="hero-scores" id="hero-scores"></div>
+  <div id="fallback-warn" style="display:none;margin:12px auto;max-width:420px;padding:10px 16px;background:var(--amber-bg);color:var(--amber-tx);border-radius:var(--r);font-size:12px;line-height:1.5;text-align:left">
+    ⚠️ <strong>실시간 데이터를 불러오지 못했습니다.</strong><br>아래 값은 근사치이며 정확하지 않을 수 있습니다. "직접 입력"을 눌러 네이버 금융에서 확인한 현재 값을 입력해 주세요.
+  </div>
   <div class="sbar">
     <span class="sd2 loading" id="sd"></span>
     <span id="stx">데이터 불러오는 중...</span>
@@ -158,12 +161,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
   <!-- 수동 입력 -->
   <div class="manual-bar" id="manual-bar">
-    <p>데이터 수신이 안 될 때, 네이버 금융 등에서 확인한 값을 직접 입력하세요.</p>
+    <p>네이버 금융 → 해외지수에서 VIX, RSI를 확인할 수 있습니다. 환율은 포털 검색 "환율"로 확인하세요.</p>
     <div class="manual-grid">
-      <div><label>VIX 지수</label><input type="number" id="mv-vix" step="0.1" placeholder="18.0"></div>
-      <div><label>나스닥 RSI</label><input type="number" id="mv-nqr" step="1" placeholder="55"></div>
+      <div><label>VIX 지수</label><input type="number" id="mv-vix" step="0.1" placeholder="24.0"></div>
+      <div><label>나스닥 RSI (14일)</label><input type="number" id="mv-nqr" step="1" placeholder="42"></div>
       <div><label>SCHD 배당률(%)</label><input type="number" id="mv-djd" step="0.1" placeholder="3.5"></div>
-      <div><label>원/달러 환율</label><input type="number" id="mv-usd" step="1" placeholder="1380"></div>
+      <div><label>원/달러 환율</label><input type="number" id="mv-usd" step="1" placeholder="1490"></div>
     </div>
     <button class="manual-apply" onclick="applyManual()">적용하기</button>
   </div>
@@ -324,23 +327,71 @@ function applyManual(){
 
 /* ================ 시장 데이터 ================ */
 var MD={vix:null,spM:null,spD:null,nqR:null,nqM:null,nqS:null,djR:null,djM:null,djD:null,ksR:null,ksM:null,ksU:null};
-var PROXIES=[
-  function(u){return'https://corsproxy.io/?'+encodeURIComponent(u)},
-  function(u){return'https://api.allorigins.win/raw?url='+encodeURIComponent(u)}
-];
+var dataIsLive=false;
 
-function yfetch(sym,range,interval,events){
+/* --- CORS 프록시 전략 (우선순위) --- */
+function makeProxyUrl(targetUrl,proxyIdx){
+  var proxies=[
+    function(u){return'https://api.allorigins.win/get?url='+encodeURIComponent(u)},
+    function(u){return'https://corsproxy.io/?'+encodeURIComponent(u)},
+    function(u){return'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)},
+    function(u){return'https://corsproxy.org/?'+encodeURIComponent(u)},
+    function(u){return'https://thingproxy.freeboard.io/fetch/'+u}
+  ];
+  if(proxyIdx>=proxies.length)return null;
+  return proxies[proxyIdx](targetUrl);
+}
+var PROXY_COUNT=5;
+
+/* --- Yahoo Finance API 호출 (개별 심볼) --- */
+async function yfetch(sym,range,interval,events){
   range=range||'1y';interval=interval||'1d';events=events||'';
   var url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(sym)+'?range='+range+'&interval='+interval;
   if(events)url+='&events='+events;
-  return tryProxies(url);
-}
-async function tryProxies(url){
-  for(var i=0;i<PROXIES.length;i++){
-    try{var r=await fetch(PROXIES[i](url),{signal:AbortSignal.timeout(10000)});if(!r.ok)continue;var d=await r.json();if(d.chart&&d.chart.result)return d.chart.result[0]}catch(e){continue}
-  }return null;
+
+  for(var p=0;p<PROXY_COUNT;p++){
+    var proxyUrl=makeProxyUrl(url,p);
+    if(!proxyUrl)continue;
+    try{
+      var r=await fetch(proxyUrl,{signal:AbortSignal.timeout(8000)});
+      if(!r.ok)continue;
+      var text=await r.text();
+      var d=parseYfResponse(text);
+      if(d)return d;
+    }catch(e){continue}
+  }
+  /* query2 서버도 시도 */
+  var url2=url.replace('query1.','query2.');
+  for(var p=0;p<PROXY_COUNT;p++){
+    var proxyUrl=makeProxyUrl(url2,p);
+    if(!proxyUrl)continue;
+    try{
+      var r=await fetch(proxyUrl,{signal:AbortSignal.timeout(8000)});
+      if(!r.ok)continue;
+      var text=await r.text();
+      var d=parseYfResponse(text);
+      if(d)return d;
+    }catch(e){continue}
+  }
+  return null;
 }
 
+function parseYfResponse(text){
+  try{
+    var obj=JSON.parse(text);
+    /* allorigins /get 응답: {contents:"..."} */
+    if(obj.contents){
+      try{var inner=JSON.parse(obj.contents);if(inner.chart&&inner.chart.result)return inner.chart.result[0]}catch(e){}
+    }
+    /* 직접 Yahoo JSON */
+    if(obj.chart&&obj.chart.result)return obj.chart.result[0];
+    /* htmldriven 등 body 래핑 */
+    if(obj.body){try{var b=JSON.parse(obj.body);if(b.chart&&b.chart.result)return b.chart.result[0]}catch(e){}}
+  }catch(e){}
+  return null;
+}
+
+/* --- 기술적 지표 계산 --- */
 function calcRSI(closes,n){n=n||14;if(closes.length<n+1)return null;var r=closes.slice(-(n+1));var g=0,l=0;for(var i=1;i<r.length;i++){var c=r[i]-r[i-1];if(c>0)g+=c;else l-=c}var ag=g/n,al=l/n;return al===0?100:Math.round(100-100/(1+ag/al))}
 function calcMA200(closes){if(closes.length<200)return null;var s=0;for(var i=closes.length-200;i<closes.length;i++)s+=closes[i];var m=s/200;return Math.round(((closes[closes.length-1]-m)/m)*1000)/10}
 function calcRelStr(a,b,n){n=n||20;if(a.length<n+1||b.length<n+1)return null;return Math.round(((a[a.length-1]/a[a.length-1-n]-1)-(b[b.length-1]/b[b.length-1-n]-1))*1000)/10}
@@ -360,52 +411,137 @@ function calcSCHDYield(data){
   return total===0?null:Math.round((total/price)*1000)/10;
 }
 
-var fetchTimeout=null;
+/* --- 캐시 (성공한 데이터 4시간 유효) --- */
+var CACHE_KEY='isa_md_cache';
+var CACHE_TTL=4*60*60*1000;
+function loadCache(){
+  try{
+    var raw=localStorage.getItem(CACHE_KEY);
+    if(!raw)return null;
+    var c=JSON.parse(raw);
+    if(Date.now()-c.ts>CACHE_TTL)return null;
+    return c.data;
+  }catch(e){return null}
+}
+function saveCache(data){
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify({ts:Date.now(),data:data}))}catch(e){}
+}
+
+/* --- 메인 데이터 로드 --- */
 async function fetchAll(){
   setSt('loading','데이터 불러오는 중...');
-  /* 15초 타임아웃 */
-  if(fetchTimeout)clearTimeout(fetchTimeout);
-  fetchTimeout=setTimeout(function(){
-    if(MD.vix==null){
-      setSt('off','응답 시간 초과 — 기본값 또는 직접 입력을 이용하세요');
-      applyFallback();renderSignals();
-    }
-  },15000);
 
-  try{
-    var results=await Promise.all([
-      yfetch('^VIX','5d'),yfetch('^GSPC'),yfetch('^IXIC'),
-      yfetch('^DJI'),yfetch('^KS11'),yfetch('KRW=X','5d'),
-      yfetch('SCHD','1y','1d','div')
-    ]);
-    clearTimeout(fetchTimeout);
-    var vxD=results[0],spD=results[1],nqD=results[2],djD=results[3],ksD=results[4],fxD=results[5],schd=results[6];
-
-    if(vxD){var vc=cl(vxD.indicators.quote[0].close);if(vc.length>0)MD.vix=Math.round(vc[vc.length-1]*10)/10}
-    if(spD){var sc=cl(spD.indicators.quote[0].close);MD.spM=calcMA200(sc);if(spD.meta&&spD.meta.regularMarketPrice)MD.spD=Math.round(72/spD.meta.regularMarketPrice*1000)/10}
-    if(nqD&&spD){var nc=cl(nqD.indicators.quote[0].close),spc=cl(spD.indicators.quote[0].close);MD.nqR=calcRSI(nc);MD.nqM=calcMA200(nc);MD.nqS=calcRelStr(nc,spc)}
-    if(djD){var dc=cl(djD.indicators.quote[0].close);MD.djR=calcRSI(dc);MD.djM=calcMA200(dc)}
-    if(schd){var ry=calcSCHDYield(schd);if(ry!==null)MD.djD=ry;else if(djD&&djD.meta&&djD.meta.regularMarketPrice)MD.djD=Math.round(580/djD.meta.regularMarketPrice*1000)/10}
-    else if(djD&&djD.meta&&djD.meta.regularMarketPrice)MD.djD=Math.round(580/djD.meta.regularMarketPrice*1000)/10;
-    if(ksD){var kc=cl(ksD.indicators.quote[0].close);MD.ksR=calcRSI(kc);MD.ksM=calcMA200(kc)}
-    if(fxD){var fc=cl(fxD.indicators.quote[0].close);if(fc.length>0)MD.ksU=Math.round(fc[fc.length-1])}
-
-    var ok=MD.vix!=null&&MD.nqR!=null&&MD.djR!=null&&MD.ksR!=null;
-    setSt(ok?'live':'stale',ok?'실시간 · '+new Date().toLocaleString('ko-KR'):'일부 데이터만 수신됨');
-  }catch(e){
-    clearTimeout(fetchTimeout);
-    setSt('off','데이터 수신 실패 — 기본값 표시 중');
+  /* 캐시 확인 — 4시간 이내면 캐시 사용 후 백그라운드 갱신 */
+  var cached=loadCache();
+  if(cached){
+    MD=cached;
+    dataIsLive=true;
+    var cacheAge=Date.now()-(JSON.parse(localStorage.getItem(CACHE_KEY)).ts);
+    var mins=Math.round(cacheAge/60000);
+    setSt('stale','캐시 데이터 ('+mins+'분 전) — 새로고침으로 업데이트');
+    renderSignals();
   }
+
+  var successCount=0;
+  var spCloses=null;
+
+  /* 개별 심볼을 병렬로 가져오되, 각각 독립적으로 처리 */
+  var fetches=[
+    {key:'vix',fn:function(){return yfetch('^VIX','5d')}},
+    {key:'sp',fn:function(){return yfetch('^GSPC')}},
+    {key:'nq',fn:function(){return yfetch('^IXIC')}},
+    {key:'dj',fn:function(){return yfetch('^DJI')}},
+    {key:'ks',fn:function(){return yfetch('^KS11')}},
+    {key:'fx',fn:function(){return yfetch('KRW=X','5d')}},
+    {key:'schd',fn:function(){return yfetch('SCHD','1y','1d','div')}}
+  ];
+
+  var results={};
+  var promises=fetches.map(function(f){
+    return f.fn().then(function(d){results[f.key]=d;if(d)successCount++}).catch(function(){results[f.key]=null});
+  });
+
+  /* 20초 전체 타임아웃 */
+  var timeout=new Promise(function(resolve){setTimeout(resolve,20000)});
+  await Promise.race([Promise.all(promises),timeout]);
+
+  /* 결과 처리 */
+  try{
+    if(results.vix){var vc=cl(results.vix.indicators.quote[0].close);if(vc.length>0)MD.vix=Math.round(vc[vc.length-1]*10)/10}
+    if(results.sp){
+      var sc=cl(results.sp.indicators.quote[0].close);
+      spCloses=sc;
+      MD.spM=calcMA200(sc);
+      if(results.sp.meta&&results.sp.meta.regularMarketPrice)MD.spD=Math.round(72/results.sp.meta.regularMarketPrice*1000)/10;
+    }
+    if(results.nq){
+      var nc=cl(results.nq.indicators.quote[0].close);
+      MD.nqR=calcRSI(nc);
+      MD.nqM=calcMA200(nc);
+      if(spCloses)MD.nqS=calcRelStr(nc,spCloses);
+    }
+    if(results.dj){
+      var dc=cl(results.dj.indicators.quote[0].close);
+      MD.djR=calcRSI(dc);
+      MD.djM=calcMA200(dc);
+    }
+    if(results.schd){
+      var ry=calcSCHDYield(results.schd);
+      if(ry!==null)MD.djD=ry;
+    }
+    if(!MD.djD&&results.dj&&results.dj.meta&&results.dj.meta.regularMarketPrice){
+      MD.djD=Math.round(580/results.dj.meta.regularMarketPrice*1000)/10;
+    }
+    if(results.ks){var kc=cl(results.ks.indicators.quote[0].close);MD.ksR=calcRSI(kc);MD.ksM=calcMA200(kc)}
+    if(results.fx){var fc=cl(results.fx.indicators.quote[0].close);if(fc.length>0)MD.ksU=Math.round(fc[fc.length-1])}
+  }catch(e){}
+
+  /* 결과 판정 */
+  if(successCount>=5){
+    dataIsLive=true;
+    saveCache(JSON.parse(JSON.stringify(MD)));
+    setSt('live','실시간 · '+new Date().toLocaleString('ko-KR')+' ('+successCount+'/7 수신)');
+  }else if(successCount>0){
+    dataIsLive=true;
+    saveCache(JSON.parse(JSON.stringify(MD)));
+    setSt('stale','일부 수신 ('+successCount+'/7) · '+new Date().toLocaleString('ko-KR'));
+  }else if(!cached){
+    dataIsLive=false;
+    setSt('off','⚠️ 실시간 수신 실패 — "직접 입력"으로 현재 값을 넣어주세요');
+  }
+
   applyFallback();renderSignals();
 }
 
 function applyFallback(){
-  if(MD.vix==null)MD.vix=18;if(MD.spM==null)MD.spM=3;if(MD.spD==null)MD.spD=1.4;
-  if(MD.nqR==null)MD.nqR=55;if(MD.nqM==null)MD.nqM=5;if(MD.nqS==null)MD.nqS=0;
-  if(MD.djR==null)MD.djR=52;if(MD.djM==null)MD.djM=2;if(MD.djD==null)MD.djD=3.5;
-  if(MD.ksR==null)MD.ksR=50;if(MD.ksM==null)MD.ksM=0;if(MD.ksU==null)MD.ksU=1380;
+  /*
+   * 2026년 3월 18일 기준 근사값.
+   * 실제 데이터 수신에 실패한 항목만 이 값으로 대체됩니다.
+   * 기본값이 사용되면 화면에 경고가 표시됩니다.
+   */
+  var usedFallback=false;
+  if(MD.vix==null){MD.vix=23.8;usedFallback=true}
+  if(MD.spM==null){MD.spM=-2;usedFallback=true}
+  if(MD.spD==null){MD.spD=1.1;usedFallback=true}
+  if(MD.nqR==null){MD.nqR=44;usedFallback=true}
+  if(MD.nqM==null){MD.nqM=-4;usedFallback=true}
+  if(MD.nqS==null){MD.nqS=-1;usedFallback=true}
+  if(MD.djR==null){MD.djR=48;usedFallback=true}
+  if(MD.djM==null){MD.djM=0;usedFallback=true}
+  if(MD.djD==null){MD.djD=3.5;usedFallback=true}
+  if(MD.ksR==null){MD.ksR=40;usedFallback=true}
+  if(MD.ksM==null){MD.ksM=-8;usedFallback=true}
+  if(MD.ksU==null){MD.ksU=1490;usedFallback=true}
+  if(usedFallback&&!dataIsLive){
+    setSt('off','⚠️ 실시간 수신 실패 — 기본값 표시 중 (2026.3.18 기준). "직접 입력"으로 정확한 값을 넣어주세요');
+  }
 }
-function setSt(l,t){document.getElementById('sd').className='sd2 '+l;document.getElementById('stx').textContent=t}
+function setSt(l,t){
+  document.getElementById('sd').className='sd2 '+l;
+  document.getElementById('stx').textContent=t;
+  var warn=document.getElementById('fallback-warn');
+  warn.style.display=(l==='live')?'none':'block';
+}
 
 /* ================ 신호 판정 ================ */
 function sigVix(v){if(v>=40)return{s:5,l:'극도 공포 → 적극 매수',d:'시장 패닉. 강한 반등 구간.'};if(v>=30)return{s:4,l:'공포 → 분할 매수',d:'과매도. 비중 확대.'};if(v>=20)return{s:2,l:'불안 → 기본 비중',d:'불확실성. 정액 투자.'};if(v>=15)return{s:2,l:'안정 → 정상',d:'정상. 계획대로.'};return{s:1,l:'과열 낙관 → 신중',d:'VIX 15 미만. 조정 가능.'}}
