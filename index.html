@@ -98,6 +98,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .at td{padding:9px 8px;border-bottom:1px solid var(--bd)}
 .at td:not(:first-child){text-align:right}
 .at input[type=range]{width:44px}
+.at input[type=number]::-webkit-outer-spin-button,.at input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.at input[type=number]{-moz-appearance:textfield}
+.pct-btn:active{background:var(--bd2)!important}
 .pb{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .pb button{padding:8px 16px;border:1px solid var(--bd2);border-radius:20px;background:var(--bg2);color:var(--tx);font-size:13px;cursor:pointer;transition:all .2s;font-family:inherit}
 .pb button:hover{background:var(--bg3);border-color:var(--blue);color:var(--blue)}
@@ -642,16 +645,27 @@ function buildTable(){
   for(var i=0;i<FUNDS.length;i++){
     var f=FUNDS[i],a=Math.round(m*f.p/100);
     h+='<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:'+f.co+';margin-right:6px;vertical-align:middle"></span><span style="font-weight:500">'+f.n+'</span><br><span style="font-size:11px;color:var(--tx3)">'+f.c+'</span></td>';
-    h+='<td style="text-align:center"><input type="range" min="0" max="100" step="5" value="'+f.p+'" data-i="'+i+'" class="as"><span class="mono" style="font-size:12px;font-weight:500" id="p'+i+'">'+f.p+'%</span></td>';
+    h+='<td style="text-align:center"><div style="display:inline-flex;align-items:center;border:1px solid var(--bd2);border-radius:6px;overflow:hidden"><button class="pct-btn" data-i="'+i+'" data-d="-5" style="width:28px;height:32px;border:none;background:var(--bg3);color:var(--tx2);font-size:16px;cursor:pointer;font-family:inherit;line-height:1">−</button><input type="number" min="0" max="100" step="5" value="'+f.p+'" data-i="'+i+'" class="as" style="width:40px;height:32px;border:none;text-align:center;font-size:13px;font-weight:500;font-family:inherit;background:var(--bg2);color:var(--tx);-moz-appearance:textfield"><button class="pct-btn" data-i="'+i+'" data-d="5" style="width:28px;height:32px;border:none;background:var(--bg3);color:var(--tx2);font-size:16px;cursor:pointer;font-family:inherit;line-height:1">+</button></div><span style="font-size:11px;color:var(--tx3);margin-left:4px">%</span></td>';
     h+='<td style="color:var(--green);font-weight:500" class="mono">+'+(f.r*100).toFixed(1)+'%</td>';
     h+='<td style="color:var(--purple)" class="mono">'+(f.d*100).toFixed(1)+'%</td>';
     h+='<td style="font-weight:500" class="mono" id="m'+i+'">'+a+'만원</td></tr>';
   }
   h+='</tbody>';document.getElementById('at').innerHTML=h;
-  var sliders=document.querySelectorAll('.as');
-  for(var j=0;j<sliders.length;j++){sliders[j].addEventListener('input',function(e){
-    var idx=parseInt(e.target.dataset.i);FUNDS[idx].p=parseInt(e.target.value);
-    document.getElementById('p'+idx).textContent=e.target.value+'%';recalc();renderSignals();})}
+  /* 숫자 직접 입력 */
+  var inputs=document.querySelectorAll('.as');
+  for(var j=0;j<inputs.length;j++){inputs[j].addEventListener('change',function(e){
+    var idx=parseInt(e.target.dataset.i);
+    var v=Math.max(0,Math.min(100,Math.round(parseInt(e.target.value)||0)));
+    e.target.value=v;FUNDS[idx].p=v;recalc();renderSignals();})}
+  /* +/- 버튼 */
+  var btns=document.querySelectorAll('.pct-btn');
+  for(var j=0;j<btns.length;j++){btns[j].addEventListener('click',function(e){
+    var idx=parseInt(e.currentTarget.dataset.i);
+    var delta=parseInt(e.currentTarget.dataset.d);
+    var nv=Math.max(0,Math.min(100,FUNDS[idx].p+delta));
+    FUNDS[idx].p=nv;
+    document.querySelectorAll('.as')[idx].value=nv;
+    recalc();renderSignals();})}
 }
 function ps(n,b){var bs=document.querySelectorAll('.pb button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');if(b)b.classList.add('on');var v=PR[n];for(var i=0;i<v.length;i++)FUNDS[i].p=v[i];buildTable();recalc();renderSignals()}
 
